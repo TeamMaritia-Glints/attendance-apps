@@ -26,7 +26,7 @@ const ResetPassword = () => {
             <div className="p-[20px] sm:mb-[80px]">
               <form onSubmit={handleSubmit}>
                 <p className="mb-6 text-center text-primary-blue">
-                  Insert your new password
+                  Insert your new password to finish
                 </p>
                 <div className="flex gap-4 mb-[15px]">
                   <input
