@@ -1,20 +1,15 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/router";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
+const ResetPassword = () => {
   const handleSubmit = (e) => {};
 
   return (
     <>
       <Head>
-        <title>Attendance App - Login</title>
-        <meta name="keywords" content="login" />
+        <title>Attendance App - Reset Password</title>
+        <meta name="keywords" content="reset-password" />
       </Head>
 
       <div className="sm:bg-wave bg-no-repeat bg-bottom">
@@ -29,47 +24,35 @@ const Login = () => {
               ></Image>
             </div>
             <div className="p-[20px] sm:mb-[80px]">
-              <p className="mb-6 text-center text-primary-blue">
-                Sign in and start managing your attendance
-              </p>
               <form onSubmit={handleSubmit}>
-                <div className="mb-[15px]">
-                  <input
-                    className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                    type="email"
-                    placeholder="Email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className="mb-[15px]">
+                <p className="mb-6 text-center text-primary-blue">
+                  Insert your new password
+                </p>
+                <div className="flex gap-4 mb-[15px]">
                   <input
                     className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
                     type="password"
-                    placeholder="Password"
-                    minLength="6"
+                    placeholder="New Password"
                     required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <div className="flex gap-4 mb-[15px]">
+                  <input
+                    className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                    type="password"
+                    placeholder="Confirm New Password"
+                    required
                   />
                 </div>
                 <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
-                  Sign In
+                  Reset Password
                 </button>
               </form>
-              <p className="mt-4 text-primary-green">
-                <span>
-                  <Link href="/forgotPassword">
-                    <a>Forgot Password?</a>
-                  </Link>
-                </span>
-              </p>
-              <p className="mt-2 text-primary-blue">
-                Don't have an account yet?{" "}
+              <p className="mt-4 text-primary-blue">
+                Back to{" "}
                 <span className="text-primary-green">
-                  <Link href="/register">
-                    <a>Sign up</a>
+                  <Link href="/login">
+                    <a>Login</a>
                   </Link>
                 </span>
               </p>
@@ -81,4 +64,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;

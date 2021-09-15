@@ -4,17 +4,20 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-const Login = () => {
+const Register = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = (e) => {};
 
   return (
     <>
       <Head>
-        <title>Attendance App - Login</title>
-        <meta name="keywords" content="login" />
+        <title>Attendance App - Register</title>
+        <meta name="keywords" content="register" />
       </Head>
 
       <div className="sm:bg-wave bg-no-repeat bg-bottom">
@@ -28,11 +31,26 @@ const Login = () => {
                 height={200}
               ></Image>
             </div>
-            <div className="p-[20px] sm:mb-[80px]">
-              <p className="mb-6 text-center text-primary-blue">
-                Sign in and start managing your attendance
-              </p>
+            <div className="p-[20px] sm:mb-[100px]">
+              <p className="mb-6 text-primary-blue">Create your account</p>
               <form onSubmit={handleSubmit}>
+                <div className="flex gap-4 mb-[15px]">
+                  <input
+                    className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                    type="text"
+                    placeholder="First Name"
+                    required
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                  <input
+                    className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                    type="text"
+                    placeholder="Last Name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </div>
                 <div className="mb-[15px]">
                   <input
                     className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
@@ -54,22 +72,26 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
+                <div className="mb-[15px]">
+                  <input
+                    className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                    type="password"
+                    placeholder="Confirm Password"
+                    minLength="6"
+                    required
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </div>
                 <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
-                  Sign In
+                  Sign Up
                 </button>
               </form>
-              <p className="mt-4 text-primary-green">
-                <span>
-                  <Link href="/forgotPassword">
-                    <a>Forgot Password?</a>
-                  </Link>
-                </span>
-              </p>
               <p className="mt-2 text-primary-blue">
-                Don't have an account yet?{" "}
+                Already have an account?{" "}
                 <span className="text-primary-green">
-                  <Link href="/register">
-                    <a>Sign up</a>
+                  <Link href="/login">
+                    <a>Sign in</a>
                   </Link>
                 </span>
               </p>
@@ -81,4 +103,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
