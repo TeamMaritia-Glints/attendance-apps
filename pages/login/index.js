@@ -7,8 +7,39 @@ import { useRouter } from "next/router";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {};
+  const router = useRouter();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const signIn = {
+      email,
+      password,
+    };
+
+    fetch("https://attendance-employee.herokuapp.com/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(signIn),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        if (data.status === "error") {
+          throw Error(data.message);
+        } else {
+          setError(null);
+          console.log(data);
+        }
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
+  };
 
   return (
     <>
@@ -57,6 +88,12 @@ const Login = () => {
                 <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
                   Sign In
                 </button>
+                {error !== null && error !== "[object Object]" && (
+                  <p className="mt-4 text-[red]">{error}</p>
+                )}
+                {error === "[object Object]" && (
+                  <p className="mt-4 text-[red]">email is not valid.</p>
+                )}
               </form>
               <p className="mt-4 text-primary-green">
                 <span>

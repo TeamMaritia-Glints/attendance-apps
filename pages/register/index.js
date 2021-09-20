@@ -10,8 +10,53 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isSame, setIsSame] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {};
+  const router = useRouter();
+
+  const checkConfirmPassword = () => {
+    if (password === confirmPassword) {
+      setIsSame(true);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let fullName = lastName
+      ? `${firstName} ${lastName}`
+      : (fullName = firstName);
+
+    const signUp = {
+      name: fullName,
+      email: email,
+      password: password,
+      confirmpassword: confirmPassword,
+      role: "employee",
+      status: false,
+    };
+
+    fetch("https://attendance-employee.herokuapp.com/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(signUp),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.status === "error") {
+          throw Error(data.message);
+        } else {
+          setError(null);
+          router.push("/login");
+        }
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
+  };
 
   return (
     <>
@@ -31,7 +76,7 @@ const Register = () => {
                 height={200}
               ></Image>
             </div>
-            <div className="p-[20px] sm:mb-[100px]">
+            <div className="p-[20px] sm:mb-[50px]">
               <p className="mb-6 text-primary-blue">Create your account</p>
               <form onSubmit={handleSubmit}>
                 <div className="flex gap-4 mb-[15px]">
@@ -81,11 +126,20 @@ const Register = () => {
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
+                    onKeyUp={checkConfirmPassword}
                   />
                 </div>
-                <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
-                  Sign Up
-                </button>
+                {isSame && (
+                  <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
+                    Sign Up
+                  </button>
+                )}
+                {!isSame && (
+                  <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue cursor-not-allowed">
+                    Sign Up
+                  </button>
+                )}
+                {error !== null && <p className="mt-4 text-[red]">{error}</p>}
               </form>
               <p className="mt-2 text-primary-blue">
                 Already have an account?{" "}
