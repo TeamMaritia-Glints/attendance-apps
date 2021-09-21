@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Wave from "../../public/wave.svg";
-import EditAdmin from ".//editAdmin";
+import EditAdmin from "./editAdmin";
 
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
@@ -33,7 +33,6 @@ const Admin = () => {
           </h2>
           </div>
       <div className="sm:bg-wave bg-no-repeat bg-bottom">
-        
       <Link to={`/editAdmin`}>
           <button
              className="bg-yellow-500 text-white active:bg-blue-600 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
@@ -42,6 +41,7 @@ const Admin = () => {
               Edit
           </button>
        </Link>
+    
 
     <table className="items-center w-full bg-transparent border-collapse">
                 <thead>
