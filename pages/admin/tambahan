@@ -1,0 +1,59 @@
+{empty ? (
+                    <div className="w-full justify-center items-center flex flex-col p-6">
+                      No Data Displayed
+                    </div>
+                  ) : (
+                    <>
+                      {loading && (
+                        <div>
+                          {/* <Loader
+                        className="flex items-center justify-center mx-auto text-center mt-10 mb-10"
+                        type="Oval"
+                        color="#00BFFF"
+                        height={80}
+                        width={80}
+                      /> */}
+                          Loading
+                        </div>
+                      )}
+                      {!loading &&
+                        filterData.map((x) => (
+                          <tr>
+                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left font-bold">
+                              {i++}
+                            </td>
+                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left font-bold">
+                              {x.name}
+                            </td>
+                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left font-bold">
+                              {x.checkIn}
+                            </td>
+                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left font-bold">
+                              {x.checkOut}
+                            </td>
+                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs  p-4">
+                              <div className="flex">
+                                {/* <Link
+                              to={`/admin/adminworksdetail/${x.id}`}
+                            >
+                              <button
+                                className="bg-blue-500 text-white active:bg-blue-600 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                                type="button"
+                              >
+                                Details
+                              </button>
+                            </Link> */}
+                                <Link to={`/admin/editAdmin/${x.id}`}>
+                                  <button
+                                    className="bg-yellow-500 text-white active:bg-blue-600 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                                    type="button"
+                                  >
+                                    Edit
+                                  </button>
+                                </Link>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                    </>
+                  )}
