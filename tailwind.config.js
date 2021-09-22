@@ -14,7 +14,7 @@ module.exports = {
         "primary-green": "#20DF7F",
       },
       backgroundImage: {
-        wave: "url('../public/wave.svg')",
+        wave: "url('/wave.svg')",
       },
     },
   },
