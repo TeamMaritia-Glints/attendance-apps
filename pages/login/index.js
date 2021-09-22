@@ -97,7 +97,7 @@ const Login = () => {
               </form>
               <p className="mt-4 text-primary-green">
                 <span>
-                  <Link href="/forgotPassword">
+                  <Link href="/forgot-password">
                     <a>Forgot Password?</a>
                   </Link>
                 </span>

@@ -6,8 +6,38 @@ import { useRouter } from "next/router";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  const [success, setSuccess] = useState(null);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const forgot = {
+      email,
+    };
+
+    fetch("https://attendance-employee.herokuapp.com/auth/forgotpw", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(forgot),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.status === "error") {
+          throw Error(data.message);
+        } else {
+          setError(null);
+          setSuccess(data.message);
+        }
+        console.log(data);
+      })
+      .catch((err) => {
+        setSuccess(null);
+        setError(err.message);
+      });
+  };
 
   return (
     <>
@@ -45,6 +75,10 @@ const ForgotPassword = () => {
                 <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
                   Send
                 </button>
+                {success !== null && (
+                  <p className="mt-4 text-[green] w-72">{success}</p>
+                )}
+                {error !== null && <p className="mt-4 text-[red]">{error}</p>}
               </form>
               <p className="mt-4 text-primary-blue">
                 Back to{" "}
