@@ -1,75 +1,85 @@
 import React, { useState } from "react";
 import Head from "next/head";
+import Link from "next/link";
+import Layout from "../../components/layout";
 
-const EditAdmin = () => {
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [position, setPosition] = useState("");
-    const [email, setEmail] = useState("");
-}
+export const getStaticProp = async () => {
+    const res = await fetch (`https://attendance-employee.herokuapp.com/office`);
+    const data = await res.json();
+  
+    return{
+      props: {addOffice: data}
+    } 
+  }
+
+const AddOffice = (addOffice) => {
+    const [name, setName] = useState("");
+    const [address, setAddress] = useState("");
+    const [latitude, setLatitude] = useState("");
+    const [longitude, setLongitude] = useState("");
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+          
+    }
 
 return (
     <>
     <Head>
-        <title>Edit User</title>
-        <meta name="keywords" content="editAmin" />
+        <title>Office</title>
+        <meta name="keywords" content="editUser" />
       </Head>
-
+      <Layout></Layout>
       <div className="sm:bg-wave bg-no-repeat bg-bottom">
         <div className="flex h-screen">
           <div className="m-auto px-12">
-            <div className="flex justify-center">
-              <Image
-                src="/logo.png"
-                alt="Glints Logo"
-                width={200}
-                height={200}
-              ></Image>
-            </div>
             <div className="p-[20px] sm:mb-[100px]">
-              <p className="mb-6 text-primary-blue">Edit User</p>
+              <p className="mb-6 text-primary-blue">Add New Office</p>
               <form onSubmit={handleSubmit}>
                 <div className="flex gap-4 mb-[15px]">
                   <input
-                    className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                    className="w-full h-[0px] pl-[15px] rounded-md bg-primary-blue text-white"
                     type="text"
-                    placeholder="First Name"
+                    placeholder="Office's Name"
                     required
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                  />
-                  <input
-                    className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                    type="text"
-                    placeholder="Last Name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
-                <div className="mb-[15px]">
+                <div>
                   <input
                     className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                    type="email"
-                    placeholder="Email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="text"
+                    placeholder="Address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
                   />
                 </div>
                 <div className="mb-[15px]">
                   <input
                     className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
                     type="text"
-                    placeholder="Position"
-                    minLength="6"
+                    placeholder="latitude"
                     required
-                    value={Position}
-                    onChange={(e) => setPosition(e.target.value)}
+                    value={latitude}
+                    onChange={(e) => setLatitude(e.target.value)}
                   />
                 </div>
+                <div className="mb-[15px]">
+                  <input
+                    className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                    type="text"
+                    placeholder="longitude"
+                    required
+                    value={longitude}
+                    onChange={(e) => setLongitude(e.target.value)}
+                  />
+                </div>
+                <Link href={`/admin/office`}>
                 <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
                   Cancel
                 </button>
+                </Link>
                 <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
                   Submit
                 </button>
@@ -81,5 +91,6 @@ return (
       </div>
     </>
 )
+};
 
-export default EditAdmin;
+export default AddOffice;

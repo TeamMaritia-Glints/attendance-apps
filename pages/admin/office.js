@@ -1,31 +1,36 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link"
+import Head from "next/head";
 import Layout from "../../components/layout";
 
-var today = new Date();
-var dd = String(today.getDate()).padStart(2, '0');
-var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-var yyyy = today.getFullYear();
-var hh = today.getHours();
-var min = String(today.getMinutes() + 1).padStart(2, '0');;
-today = dd+'/'+mm+'/'+yyyy+' - '+hh+':'+min;
 
-const Admin = () => {
-  const [Admin] = useState([]);
+const Office = () => {
+  const [Office] = useState([]);
   
 
   return (
-    <>  
+    <>
+    <Head>
+    <title>Office Page</title>
+        <meta name="keywords" content="office"/>
+        </Head>  
      <Layout></Layout>  
-     <div className="sm:bg-wave bg-no-repeat bg-bottom">
-      <div className="flex h-screen">     
-        <div className="m-auto px-12">         
-          <div>
-            {today}
-            </div>    
+     <div //className="sm:bg-wave bg-no-repeat bg-bottom"
+     >
+      <div className="flex h-auto">     
+        <div className="m-auto">
 
-              <table className="items-center w-full bg-transparent border-collapse">
+            <Link href="../../admin/addoffice">
+                <button
+                className="bg-yellow-500 text-white active:bg-blue-600 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                type="button"
+              >
+                Add Office
+              </button>
+          </Link>
+
+              <table className="items-justify w-full bg-transparent border-collapse">
                 <thead>
                   <tr>
                     <th
@@ -47,28 +52,21 @@ const Admin = () => {
                         "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
                       }
                     >
-                      Role
+                      Address
                     </th>
                     <th
                       className={
                         "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
                       }
                     >
-                      Check In
+                      Latitude
                     </th>
                     <th
                       className={
                         "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
                       }
                     >
-                      Check Out
-                    </th>
-                    <th
-                      className={
-                        "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
-                      }
-                    >
-                      Work Hour
+                      Longitude
                     </th>
                     <th
                       className={
@@ -97,4 +95,4 @@ const Admin = () => {
 };
 
 
-export default Admin;
+export default Office;

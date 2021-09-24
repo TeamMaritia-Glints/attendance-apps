@@ -3,13 +3,17 @@ import 'tailwindcss/tailwind.css'
 import Head from "next/head";
 
 
-function MyApp({ Component, pageProps }) {
+
+function MyApp({ Component, pageProps, children }) {
   return (
     <>
       <Head>
         <link rel="shortcut icon" href="/icon.png" />
       </Head>
+      
       <Component {...pageProps} />
+    
+
     </>
   );
 }
