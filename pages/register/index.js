@@ -18,6 +18,8 @@ const Register = () => {
   const checkConfirmPassword = () => {
     if (password === confirmPassword) {
       setIsSame(true);
+    } else {
+      setIsSame(false);
     }
   };
 

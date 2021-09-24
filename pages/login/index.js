@@ -28,12 +28,10 @@ const Login = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
         if (data.status === "error") {
           throw Error(data.message);
         } else {
           setError(null);
-          console.log(data);
         }
       })
       .catch((err) => {
