@@ -7,6 +7,7 @@ const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSame, setIsSame] = useState(false);
+  const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
 
   const queryString = typeof window !== "undefined" && window.location.search;
@@ -110,6 +111,9 @@ const ResetPassword = () => {
                   <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue cursor-not-allowed">
                     Reset Password
                   </button>
+                )}
+                {success !== null && (
+                  <p className="mt-4 text-[green]">{success}</p>
                 )}
                 {error !== null && <p className="mt-4 text-[red]">{error}</p>}
               </form>
