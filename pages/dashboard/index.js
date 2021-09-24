@@ -49,8 +49,8 @@ const User = () => {
       </Head>
 
 
-      <div class="flex flex-col h-screen">
-  <header class="h-[100px] md:h-[160px] bg-light-green text-dark-green">
+      <div className="flex flex-col h-screen">
+  <header className="h-[100px] md:h-[160px] bg-light-green text-dark-green">
   <div className="flex justify-between items-center">
     <div className="hidden md:contents">
     <Image src="/logo.png"
@@ -105,17 +105,17 @@ const User = () => {
     </div>
   </div>
   </header>
-  <main class="p-4 flex-grow bg-white">
+  <main className="p-4 flex-grow bg-white">
    <div className= "p-1 md:p-3 flex flex-col text-dark-green text-base md:text-xl">
   <h>Name : </h>
   <h>Role : </h>
   </div>
-  <div class= "md:p-3 h-[320px] bg-light-green align-middle text-center">
+  <div className= "md:p-3 h-[320px] bg-light-green align-middle text-center">
 <Geo/>
   </div>
   </main>
-  <footer class="md:h-[80px] h-[135px] p-2 bg-dark-green align-middle items-center text-center">
-    <div classname="flex justify-between items-center">
+  <footer className="md:h-[80px] h-[135px] p-2 bg-dark-green align-middle items-center text-center">
+    <div className="flex justify-between items-center">
     <button className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-primary-green text-dark-green cursor-pointer">
                     Check In
                   </button>
