@@ -1,9 +1,61 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 const ResetPassword = () => {
-  const handleSubmit = (e) => {};
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isSame, setIsSame] = useState(false);
+  const [error, setError] = useState(null);
+
+  const queryString = typeof window !== "undefined" && window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+
+  const tokenUrl = urlParams.get("token");
+  const idUrl = urlParams.get("id");
+  const [token] = useState(tokenUrl);
+  const [id] = useState(idUrl);
+
+  const checkConfirmPassword = () => {
+    if (password === confirmPassword) {
+      setIsSame(true);
+    } else {
+      setIsSame(false);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const reset = {
+      password,
+      confirmpassword: confirmPassword,
+    };
+
+    fetch(
+      `https://attendance-employee.herokuapp.com/auth/passwordreset?token=${token}&id=${id}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reset),
+      }
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.status === "error") {
+          throw Error(data.message);
+        } else {
+          setError(null);
+          setSuccess(data.message);
+        }
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
+  };
 
   return (
     <>
@@ -34,6 +86,8 @@ const ResetPassword = () => {
                     type="password"
                     placeholder="New Password"
                     required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 <div className="flex gap-4 mb-[15px]">
@@ -42,11 +96,22 @@ const ResetPassword = () => {
                     type="password"
                     placeholder="Confirm New Password"
                     required
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onKeyUp={checkConfirmPassword}
                   />
                 </div>
-                <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
-                  Reset Password
-                </button>
+                {isSame && (
+                  <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
+                    Reset Password
+                  </button>
+                )}
+                {!isSame && (
+                  <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue cursor-not-allowed">
+                    Reset Password
+                  </button>
+                )}
+                {error !== null && <p className="mt-4 text-[red]">{error}</p>}
               </form>
               <p className="mt-4 text-primary-blue">
                 Back to{" "}

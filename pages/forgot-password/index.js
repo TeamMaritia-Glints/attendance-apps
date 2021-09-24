@@ -2,7 +2,6 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/router";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -31,7 +30,6 @@ const ForgotPassword = () => {
           setError(null);
           setSuccess(data.message);
         }
-        console.log(data);
       })
       .catch((err) => {
         setSuccess(null);
