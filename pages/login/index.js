@@ -90,7 +90,7 @@ const Login = () => {
                   <p className="mt-4 text-[red]">{error}</p>
                 )}
                 {error === "[object Object]" && (
-                  <p className="mt-4 text-[red]">email is not valid.</p>
+                  <p className="mt-4 text-[red] w-72">email is not valid.</p>
                 )}
               </form>
               <p className="mt-4 text-primary-green">
