@@ -2,14 +2,13 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/router";
+import Router from "next/router";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-
-  const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,6 +31,8 @@ const Login = () => {
           throw Error(data.message);
         } else {
           setError(null);
+          Cookies.set("token", data.token);
+          Router.push("/admin");
         }
       })
       .catch((err) => {
