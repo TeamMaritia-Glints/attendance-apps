@@ -1,9 +1,11 @@
-import router, { useRouter } from "next/router";
+import Router from "next/router";
+import Cookies from "js-cookie";
 
 export default function Home() {
-  const router = useRouter();
+  const token = Cookies.get("token");
+
   if (typeof Storage !== "undefined") {
-    router.push("/login");
+    Router.push("/login");
   }
   return <></>;
 }
