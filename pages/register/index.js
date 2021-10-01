@@ -2,7 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/router";
+import Router from "next/router";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -13,11 +13,11 @@ const Register = () => {
   const [isSame, setIsSame] = useState(false);
   const [error, setError] = useState(null);
 
-  const router = useRouter();
-
   const checkConfirmPassword = () => {
     if (password === confirmPassword) {
       setIsSame(true);
+    } else {
+      setIsSame(false);
     }
   };
 
@@ -50,7 +50,7 @@ const Register = () => {
           throw Error(data.message);
         } else {
           setError(null);
-          router.push("/login");
+          Router.push("/login");
         }
       })
       .catch((err) => {
