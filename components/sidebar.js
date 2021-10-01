@@ -16,6 +16,7 @@ const Sidebar = () => {
       },
     }).then(() => {
       Cookies.remove("token");
+      Cookies.remove("refreshToken");
       router.push("/");
     });
   };

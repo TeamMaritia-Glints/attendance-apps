@@ -28,10 +28,15 @@ const Login = () => {
       })
       .then((data) => {
         if (data.status === "error") {
-          throw Error(data.message);
+          if (typeof data.message === "object") {
+            throw Error(data.message[0].message);
+          } else {
+            throw Error(data.message);
+          }
         } else {
           setError(null);
           Cookies.set("token", data.token);
+          Cookies.set("refreshToken", data["refresh_token"]);
           Router.push("/admin");
         }
       })
@@ -89,9 +94,6 @@ const Login = () => {
                 </button>
                 {error !== null && error !== "[object Object]" && (
                   <p className="mt-4 text-[red]">{error}</p>
-                )}
-                {error === "[object Object]" && (
-                  <p className="mt-4 text-[red] w-72">email is not valid.</p>
                 )}
               </form>
               <p className="mt-4 text-primary-green">
