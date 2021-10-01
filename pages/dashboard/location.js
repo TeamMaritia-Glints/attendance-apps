@@ -37,7 +37,7 @@ class MyComponents extends Component {
         googleMapsApiKey="AIzaSyA-Gh7u-yBxHivkPdaKERRIijHxEcqhUIU"
       >
         <GoogleMap
-          mapContainerStyle={{ width: '100%',height: '320px' }}
+          mapContainerStyle={{ width: '100%',height: '100%' }}
           center={currentPosition}
           zoom={10}
         >

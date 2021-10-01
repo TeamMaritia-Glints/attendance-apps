@@ -1,47 +1,83 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import { Component } from "react";
+import Router from "next/router";
 import Geo from "./location";
+import Cookies from "js-cookie";
 
-const User = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+class User extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      checkInTime: "",
+      checkInLocation: "",
+      lat: '',
+      lng: ''
+    };
+    this.handleCheckin = this.handleCheckin.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  componentDidMount(){
+    if (!!navigator.geolocation) {
+      navigator.geolocation.watchPosition((position) => {
+        this.setState({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      (err) => console.log(err),
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 10000 },
+      );
+    } else {
+      alert('El navegador no soporta la geolocalización,')
+    }
+  }
 
-  const router = useRouter();
+  async handleCheckin() {
+    const payload = {
+      "checkInTime": new Date(), 
+      "checkInLocation": {
+        "longitude": this.state.lng,
+        "latitude": this.state.lat
+      }
+    }
+    const res = await fetch(
+      'https://attendance-employee.herokuapp.com/attendance/check-in',
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: Cookies.get("token"),
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+    // const data = await res.json();
+    console.log('got response', res);
+  }
 
-  const handleSubmit = (e) => {
+  handleSubmit(e) {
     e.preventDefault();
 
-    const signIn = {
-      email,
-      password,
+    const edit = {
+      checkInTime: this.state.checkInTime,
+      checkInLocation: this.state.checkInLocation,
     };
 
-    fetch("https://attendance-employee.herokuapp.com/auth/login", {
+    fetch(`https://attendance-employee.herokuapp.com/attendance/${this.state.id}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(signIn),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        if (data.status === "error") {
-          throw Error(data.message);
-        } else {
-          setError(null);
-          console.log(data);
-        }
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  };
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: Cookies.get("token"),
+      },
+      body: JSON.stringify(edit),
+    }).then(() => {
+      Router.push("/user");
+    });
+  }
 
-  return (
+  render() {
+    return (
     <>
       <Head>
         <title>Dashboard</title>
@@ -105,18 +141,12 @@ const User = () => {
     </div>
   </div>
   </header>
-  <main className="p-4 flex-grow bg-white">
-   <div className= "p-1 md:p-3 flex flex-col text-dark-green text-base md:text-xl">
-  <h>Name : </h>
-  <h>Role : </h>
-  </div>
-  <div className= "md:p-3 h-[320px] bg-light-green align-middle text-center">
+  <main className="p-4 flex-grow bg-white flex-col">
 <Geo/>
-  </div>
   </main>
-  <footer className="md:h-[80px] h-[135px] p-2 bg-dark-green align-middle items-center text-center">
-    <div className="flex justify-between items-center">
-    <button className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-primary-green text-dark-green cursor-pointer">
+  <footer className="md:h-[80px] h-[135px] p-2 bg-dark-green place-content-center grid">
+    <div className="align-middle">
+    <button onClick={this.handleCheckin} className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-primary-green text-dark-green cursor-pointer">
                     Check In
                   </button>
     <button className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-primary-green text-dark-green cursor-pointer">
@@ -131,5 +161,5 @@ const User = () => {
     </>
   );
 };
-
+}
 export default User;
