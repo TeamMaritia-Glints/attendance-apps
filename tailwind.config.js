@@ -12,6 +12,8 @@ module.exports = {
       colors: {
         "primary-blue": "#224957",
         "primary-green": "#20DF7F",
+        "light-green" : "#CFDCE5",
+        "dark-green": "#296763",
       },
       backgroundImage: {
         wave: "url('/wave.svg')",
