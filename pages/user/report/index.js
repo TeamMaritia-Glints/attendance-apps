@@ -22,6 +22,9 @@ class Report extends Component {
       },
     }).then(() => {
       Cookies.remove("token");
+      Cookies.remove("refreshToken");
+      localStorage.removeItem("name");
+      localStorage.removeItem("role");
       Router.push("/");
     });
   }
@@ -185,7 +188,7 @@ class Report extends Component {
           <footer className="md:h-[80px] h-[100px] p-2 bg-dark-green place-content-center">
             <div className="align-middle place-content-center md:flex grid">
               <button className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-light-green text-dark-green cursor-pointer">
-                <Link href="/dashboard">Maps</Link>
+                <Link href="/user">Maps</Link>
               </button>
             </div>
           </footer>

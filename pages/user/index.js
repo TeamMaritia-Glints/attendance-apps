@@ -106,6 +106,9 @@ class User extends Component {
       },
     }).then(() => {
       Cookies.remove("token");
+      Cookies.remove("refreshToken");
+      localStorage.removeItem("name");
+      localStorage.removeItem("role");
       Router.push("/");
     });
   }
@@ -200,7 +203,7 @@ class User extends Component {
                 Check Out
               </button>
               <button className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-light-green text-dark-green cursor-pointer">
-                <Link href="/report">
+                <Link href="/user/report">
                   <a>Absence Report</a>
                 </Link>
               </button>

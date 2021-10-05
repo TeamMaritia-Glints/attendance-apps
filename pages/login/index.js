@@ -31,7 +31,7 @@ class Login extends Component {
       if (decodedToken.data.role === "admin") {
         Router.push("/admin");
       } else if (decodedToken.data.role === "employee") {
-        Router.push("/dashboard");
+        Router.push("/user");
       }
     }
   }
@@ -72,7 +72,7 @@ class Login extends Component {
           if (role === "admin") {
             Router.push("/admin");
           } else if (role === "employee") {
-            Router.push("/dashboard");
+            Router.push("/user");
           }
         }
       })
