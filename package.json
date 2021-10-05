@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^0.21.4",
     "js-cookie": "^3.0.1",
+    "jwt-decode": "^3.1.2",
     "@react-google-maps/api": "^2.4.0",
     "google-maps": "^4.3.3",
     "next": "11.1.2",
