@@ -120,7 +120,6 @@ class Login extends Component {
                       minLength="6"
                       required
                       value={this.state.password}
-                      onChange={(e) => setPassword(e.target.value)}
                       onChange={(event) => this.handleChange(event, "password")}
                     />
                   </div>

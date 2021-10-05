@@ -92,7 +92,6 @@ class AddOffice extends Component {
                   placeholder="Address"
                   required
                   value={this.state.address}
-                  onChange={(e) => setAddress(e.target.value)}
                   onChange={(event) => this.handleChange(event, "address")}
                 />
               </div>
@@ -103,7 +102,6 @@ class AddOffice extends Component {
                   placeholder="Latitude"
                   required
                   value={this.state.latitude}
-                  onChange={(e) => setLatitude(e.target.value)}
                   onChange={(event) => this.handleChange(event, "latitude")}
                 />
               </div>
@@ -114,7 +112,6 @@ class AddOffice extends Component {
                   placeholder="Longitude"
                   required
                   value={this.state.longitude}
-                  onChange={(e) => setLongitude(e.target.value)}
                   onChange={(event) => this.handleChange(event, "longitude")}
                 />
               </div>
