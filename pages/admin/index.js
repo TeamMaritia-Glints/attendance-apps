@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import Image from "next/image";
+import { Component } from "react";
+import Head from "next/head";
 import Link from "next/link"
 import Layout from "../../components/layout";
+import Cookies from "js-cookie"
+import { data } from "autoprefixer";
 
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
@@ -11,21 +13,56 @@ var hh = today.getHours();
 var min = String(today.getMinutes() + 1).padStart(2, '0');;
 today = dd+'/'+mm+'/'+yyyy+' - '+hh+':'+min;
 
-const Admin = () => {
-  const [Admin] = useState([]);
+class Admin extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { userData: [] };
+  }
+  
+  async componentDidMount() {
+    const res = await fetch(
+      "https://attendance-employee.herokuapp.com/attendance/employee-absence-report",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type" :"application/json",
+          Authorization: Cookies.get("token"),
+        },
+      }
+    );
+    const data = await res.json();
+    this.setState({ attendanceData: data.data});
+  }
+
+  render() {
+    const { attendanceData } = this.state;
   
 
   return (
     <>  
+    <Head>
+        <title>Attendance Worker</title>
+        <meta name="keywords" content="attendanceList" />
+      </Head>
      <Layout></Layout>  
      <div className="sm:bg-wave bg-no-repeat bg-bottom">
       <div className="flex h-screen">     
-        <div className="m-auto px-12">         
-          <div>
+        <div className="w-full mx-auto"
+            >         
+          <div className="text-xl">
             {today}
-            </div>    
-
-              <table className="items-center w-full bg-transparent border-collapse">
+            </div>
+            <div className="text-right">
+            <Link href="../admin/absence">
+               <button
+                  className="bg-yellow-500 text-white active:bg-blue-600 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                  type="button"
+                >
+                Cah Ngemplang
+               </button>
+            </Link>
+            </div>     
+              <table className="justify-center items-center w-full bg-transparent border-collapse">
                 <thead>
                   <tr>
                     <th
@@ -79,11 +116,9 @@ const Admin = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                <div className="w-full justify-center items-center flex flex-col p-6">
-                
-                                  
-                </div>
+                <tbody className="divide-y">
+                  
+              
                 </tbody>
               </table>
              
@@ -95,6 +130,7 @@ const Admin = () => {
             
   );
 };
+}
 
 
 export default Admin;

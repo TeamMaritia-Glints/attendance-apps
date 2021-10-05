@@ -5,32 +5,28 @@ import Head from "next/head";
 import Layout from "../../components/layout";
 
 
-const Office = () => {
-  const [Office] = useState([]);
+const Absence = () => {
+  const [Absence] = useState([]);
   
 
   return (
     <>
     <Head>
-    <title>Office Page</title>
-        <meta name="keywords" content="office"/>
-        </Head>  
+    <title>Absence Page</title>
+        <meta name="keywords" content="absence"/>
+    </Head>  
      <Layout></Layout>  
-     <div //className="sm:bg-wave bg-no-repeat bg-bottom"
-     >
-      <div className="flex h-auto">     
-        <div className="m-auto">
+     <div className="sm:bg-wave bg-no-repeat bg-bottom">
+      <div className="flex h-screen">     
+        <div //className="m-auto px-12"
+        >
+            <div>
+                <h1>
+                    Workers with more than 2 absence in a month
+                </h1>
+            </div>
 
-            <Link href="../../admin/addoffice">
-                <button
-                className="bg-yellow-500 text-white active:bg-blue-600 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                type="button"
-              >
-                Add Office
-              </button>
-          </Link>
-
-              <table className="items-justify w-full bg-transparent border-collapse">
+              <table className="table-auto">
                 <thead>
                   <tr>
                     <th
@@ -52,29 +48,16 @@ const Office = () => {
                         "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
                       }
                     >
-                      Address
+                      Role
                     </th>
                     <th
                       className={
                         "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
                       }
                     >
-                      Latitude
+                      Absence
                     </th>
-                    <th
-                      className={
-                        "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
-                      }
-                    >
-                      Longitude
-                    </th>
-                    <th
-                      className={
-                        "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
-                      }
-                    >
-                      Action
-                    </th>
+                    
                   </tr>
                 </thead>
                 <tbody>
@@ -95,4 +78,4 @@ const Office = () => {
 };
 
 
-export default Office;
+export default Absence;
