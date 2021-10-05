@@ -34,7 +34,7 @@ class Admin extends Component {
     }
 
     const res = await fetch(
-      "https://attendance-employee.herokuapp.com/attendance/employee-absence-report",
+      "https://attendance-employee.herokuapp.com/attendance/user-attendances?year=2021&month=10&day=01",
       {
         method: "GET",
         headers: {
