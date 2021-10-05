@@ -1,17 +1,34 @@
-import { Component } from "react";
+import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
-import Layout from "../../../components/layout";
+import { Component } from "react";
 import Cookies from "js-cookie";
+import Router from "next/router";
 
 class Report extends Component {
   constructor(props) {
     super(props);
     this.state = { officeData: [] };
   }
+   
+  logOut(e){
+    e.preventDefault();
+
+    fetch("https://attendance-employee.herokuapp.com/auth/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: Cookies.get("token"),
+      },
+    }).then(() => {
+      Cookies.remove("token");
+      Router.push("/");
+    });
+  };
 
   async componentDidMount() {
     const res = await fetch(
-      "https://attendance-employee.herokuapp.com/attendance/user-attendance-report?year=2021&month=9",
+      "https://attendance-employee.herokuapp.com/attendance/user-attendance-report?year=2021&month=10",
       {
         method: "GET",
         headers: {
@@ -21,14 +38,15 @@ class Report extends Component {
       }
     );
     const data = await res.json();
-    this.setState({ officeData: data.data });
+    this.setState({ officeData: data.data});
   }
   render() {
     const { officeData } = this.state;
+    console.log(officeData)
     return (
     <>
       <Head>
-        <title>Dashboard</title>
+        <title>Report</title>
         <meta name="keywords" content="dashboard" />
       </Head>
 
@@ -82,68 +100,45 @@ class Report extends Component {
                 minute: "2-digit"
                 })}</h1>
         </div>
-        <div className= "pr-3 fixed flex-col">
-      <button className=" w-35 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-dark-green text-primary-green cursor-pointer">
+        <div className= "pr-3 flex flex-col">
+      <button onClick= {this.logOut} className="w-35 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-dark-green text-primary-green cursor-pointer">
                     Log Out
                   </button>
     </div>
   </div>
   </header>
-  <main class="p-4 flex-grow bg-white">
+  <main class="p-4 bg-white overflow-auto md:overscroll-contain lg:overscroll-none ">
    <div className= "p-1 md:p-3 flex flex-col text-dark-green text-base md:text-xl">
-   <table className="items-center w-full bg-transparent border-collapse text-center">
-                <thead>
-                  <tr>
-                    <th
-                      className={
-                        "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
-                      }
-                    >
-                      Name
-                    </th>
-                    <th
-                      className={
-                        "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
-                      }
-                    >
-                      Date
-                    </th>
-                    <th
-                      className={
-                        "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
-                      }
-                    >
-                      Check In
-                    </th>
-                    <th className={
-                        "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
-                      }
-                    >
-                      Check Out
-                    </th>
-                    <th className={
-                        "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
-                      }
-                    >
-                      Working Hours
-                    </th>
-                  </tr>
-                </thead>
+   <table className="items-center w-full bg-transparent border-collapse text-center flex-grow">
+      <thead>
+        <tr>
+        <th className={"px-3 md:px-6 align-middle border border-solid py-3 text-sm md:text-xl border-l-0 border-r-0 whitespace-nowrap font-semibold text-center"}>Name</th>
+        <th className={"px-3 md:px-6 align-middle border border-solid py-3 text-sm md:text-xl border-l-0 border-r-0 whitespace-nowrap font-semibold text-center"}>Working Date</th>
+        <th className={"px-3 md:px-6 align-middle border border-solid py-3 text-sm md:text-xl border-l-0 border-r-0 whitespace-nowrap font-semibold text-center"}>Check In </th>
+        <th className={"px-3 md:px-6 align-middle border border-solid py-3 text-sm md:text-xl border-l-0 border-r-0 whitespace-nowrap font-semibold text-center"}>Check Out</th>
+        <th className={"px-3 md:px-6 align-middle border border-solid py-3 text-sm md:text-xl border-l-0 border-r-0 whitespace-nowrap font-semibold text-center"}>Working Hours</th>
+        </tr>
+        </thead>
+                {officeData && officeData.map(absence => (
+                    <tr key={absence.employeeId}> 
+                    <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2"> {absence.User.name}</th> 
+                    <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">{absence.date}</th>
+                    <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2"> {absence.checkInTime}</th> 
+                    <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">{absence.checkOutTime}</th>
+                    <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">{absence.workingHourView}</th>
+                    </tr>
+                    ))}
                 <tbody>
                 </tbody>
               </table>
   </div>
   </main>
-  <footer className="md:h-[80px] h-[135px] p-2 bg-dark-green align-middle items-center place-items-center grid">
-    <div className="align-middle">
-    <button className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-primary-green text-dark-green cursor-pointer">
-                    Check In
-                  </button>
-    <button className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-primary-green text-dark-green cursor-pointer">
-                    Check Out  
-                  </button>
+  <footer className="md:h-[80px] h-[100px] p-2 bg-dark-green place-content-center">
+    <div className="align-middle place-content-center md:flex grid">
     <button className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-light-green text-dark-green cursor-pointer">
+    <Link href="/dashboard">
                     Maps
+                    </Link>
                   </button>
      </div>             
     </footer>
@@ -151,5 +146,5 @@ class Report extends Component {
     </>
   );
 };
-
+}
 export default Report;

@@ -1,9 +1,10 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Component } from "react";
-import Router from "next/router";
+import Link from "next/link";
 import Geo from "./location";
 import Cookies from "js-cookie";
+import Router from "next/router";
 
 class User extends Component {
   constructor(props) {
@@ -15,7 +16,7 @@ class User extends Component {
       lng: ''
     };
     this.handleCheckin = this.handleCheckin.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCheckout = this.handleCheckout.bind(this);
   }
   componentDidMount(){
     if (!!navigator.geolocation) {
@@ -34,11 +35,18 @@ class User extends Component {
   }
 
   async handleCheckin() {
+    // const payload = {
+    //   "checkInTime": new Date(), 
+    //   "checkInLocation": {
+    //     "longitude": this.state.lng,
+    //     "latitude": this.state.lat
+    //   }
+    // }
     const payload = {
       "checkInTime": new Date(), 
       "checkInLocation": {
-        "longitude": this.state.lng,
-        "latitude": this.state.lat
+        "longitude": 106.8972414966973,
+        "latitude": -6.371567590490629
       }
     }
     const res = await fetch(
@@ -56,25 +64,50 @@ class User extends Component {
     console.log('got response', res);
   }
 
-  handleSubmit(e) {
+  async handleCheckout() {
+    // const payload = {
+    //   "checkInTime": new Date(), 
+    //   "checkInLocation": {
+    //     "longitude": this.state.lng,
+    //     "latitude": this.state.lat
+    //   }
+    // }
+    const payload = {
+      "checkOutTime": new Date(), 
+      "checkOutLocation": {
+        "longitude": 106.8972414966973,
+        "latitude": -6.371567590490629
+      }
+    }
+    const res = await fetch(
+      'https://attendance-employee.herokuapp.com/attendance/check-out',
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: Cookies.get("token"),
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+    // const data = await res.json();
+    console.log('got response', res);
+  }
+
+  logOut(e){
     e.preventDefault();
 
-    const edit = {
-      checkInTime: this.state.checkInTime,
-      checkInLocation: this.state.checkInLocation,
-    };
-
-    fetch(`https://attendance-employee.herokuapp.com/attendance/${this.state.id}`, {
+    fetch("https://attendance-employee.herokuapp.com/auth/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: Cookies.get("token"),
       },
-      body: JSON.stringify(edit),
     }).then(() => {
-      Router.push("/user");
+      Cookies.remove("token");
+      Router.push("/");
     });
-  }
+  };
 
   render() {
     return (
@@ -135,7 +168,7 @@ class User extends Component {
                 })}</h1>
         </div>
         <div className= "pr-3 flex flex-col">
-      <button className=" w-35 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-dark-green text-primary-green cursor-pointer">
+      <button onClick= {this.logOut} className=" w-35 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-dark-green text-primary-green cursor-pointer">
                     Log Out
                   </button>
     </div>
@@ -144,17 +177,21 @@ class User extends Component {
   <main className="p-4 flex-grow bg-white flex-col">
 <Geo/>
   </main>
-  <footer className="md:h-[80px] h-[135px] p-2 bg-dark-green place-content-center grid">
-    <div className="align-middle">
+  <footer className="md:h-[80px] h-[135px] p-2 bg-dark-green place-content-center">
+    <div className="align-middle place-content-center md:flex grid">
     <button onClick={this.handleCheckin} className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-primary-green text-dark-green cursor-pointer">
                     Check In
                   </button>
-    <button className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-primary-green text-dark-green cursor-pointer">
+    <button onClick={this.handleCheckout} className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-primary-green text-dark-green cursor-pointer">
                     Check Out  
                   </button>
     <button className="m-2 w-40 md:w-44 md:h-[40px] h-[25px] rounded-md shadow-md bg-light-green text-dark-green cursor-pointer">
-                    Absence Report
+    <Link href="/report">
+                    <a>Absence Report</a>
+                    </Link>
                   </button>
+
+                  
      </div>             
     </footer>
 </div>
