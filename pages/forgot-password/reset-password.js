@@ -43,8 +43,6 @@ class ResetPassword extends Component {
 
     const token = urlParams.get("token");
     const id = urlParams.get("id");
-    // const [token] = useState(tokenUrl);
-    // const [id] = useState(idUrl);
 
     const resetData = {
       password: this.state.password,

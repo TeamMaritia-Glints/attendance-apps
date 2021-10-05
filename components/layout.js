@@ -44,7 +44,7 @@ const Layout = ({ children }) => {
                 <p className="text-lg">Home</p>
               </a>
             </Link>
-            <Link href="#">
+            <Link href="/admin/worker">
               <a className="flex items-center py-4 pl-6 hover:bg-primary-green">
                 <span className="mr-3" />
                 <p className="text-lg">Worker</p>
@@ -113,7 +113,7 @@ const Layout = ({ children }) => {
                   <p>Home</p>
                 </a>
               </Link>
-              <Link href="#">
+              <Link href="/admin/worker">
                 <a className="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
                   <span className="mr-3"></span>
                   <p>Worker</p>
