@@ -4,14 +4,13 @@ import Link from "next/link";
 import Layout from "../../../components/layout";
 import Cookies from "js-cookie";
 
-class OfficeEdit extends Component {
+class EditUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
       name: "",
-      address: "",
-      latitude: "",
-      longitude: "",
+      email: "",
+      role: "",
       id: "",
       authToken: Cookies.get("token")
         ? Cookies.get("token")
@@ -48,7 +47,7 @@ class OfficeEdit extends Component {
     const urlId = url.substr(url.lastIndexOf("/") + 1);
 
     const res = await fetch(
-      `https://attendance-employee.herokuapp.com/office/${urlId}`,
+      `https://attendance-employee.herokuapp.com/user/${urlId}`,
       {
         method: "GET",
         headers: {
@@ -60,9 +59,8 @@ class OfficeEdit extends Component {
     const data = await res.json();
     this.setState({
       name: data.data.name,
-      address: data.data.address,
-      latitude: data.data.latitude,
-      longitude: data.data.longitude,
+      email: data.data.email,
+      role: data.data.role,
       id: data.data.id,
     });
   }
@@ -70,23 +68,22 @@ class OfficeEdit extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const editData = {
+    const edit = {
       name: this.state.name,
-      address: this.state.address,
-      latitude: this.state.latitude,
-      longitude: this.state.longitude,
+      email: this.state.email,
+      role: this.state.role,
       status: true,
     };
 
-    fetch(`https://attendance-employee.herokuapp.com/office/${this.state.id}`, {
+    fetch(`https://attendance-employee.herokuapp.com/user/${this.state.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: this.state.authToken,
       },
-      body: JSON.stringify(editData),
+      body: JSON.stringify(edit),
     }).then(() => {
-      Router.push("/admin/office");
+      Router.push("/admin/worker");
     });
   }
 
@@ -95,7 +92,7 @@ class OfficeEdit extends Component {
       <>
         <Layout>
           <div className="self-center px-12">
-            <p className="mb-6 text-primary-blue">Edit Office Profile</p>
+            <p className="mb-6 text-primary-blue">Edit User Profile</p>
             <form
               className="border w-[400px] p-10 bg-gray-50 rounded shadow"
               onSubmit={this.handleSubmit}
@@ -113,40 +110,36 @@ class OfficeEdit extends Component {
               <div className="mb-[15px]">
                 <input
                   className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                  type="text"
-                  placeholder="Address"
+                  type="email"
+                  placeholder="Email"
                   required
-                  value={this.state.address}
-                  onChange={(event) => this.handleChange(event, "address")}
+                  value={this.state.email}
+                  onChange={(event) => this.handleChange(event, "email")}
                 />
               </div>
-              <div className="mb-[15px]">
-                <input
-                  className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                  type="text"
-                  placeholder="Latitude"
+              <div className="dropdown">
+                <select
+                  className="p-2 rounded-md text-white bg-primary-blue"
+                  value={this.state.role}
                   required
-                  value={this.state.latitude}
-                  onChange={(event) => this.handleChange(event, "latitude")}
-                />
+                  onChange={(event) => this.handleChange(event, "role")}
+                >
+                  <option value="admin" type="select">
+                    Admin
+                  </option>
+                  <option value="employee">Employee</option>
+                </select>
               </div>
-              <div className="mb-[15px]">
-                <input
-                  className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                  type="text"
-                  placeholder="Longitude"
-                  required
-                  value={this.state.longitude}
-                  onChange={(event) => this.handleChange(event, "longitude")}
-                />
-              </div>
-              <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
-                Edit
+              <button
+                type="submit"
+                className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue"
+              >
+                Submit
               </button>
-              <Link href="/admin/office">
-                <a className="flex w-full h-[40px] mt-2 justify-center items-center rounded-md shadow-md bg-primary-green text-primary-blue">
+              <Link href={`/admin/worker`}>
+                <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
                   Cancel
-                </a>
+                </button>
               </Link>
             </form>
           </div>
@@ -156,4 +149,4 @@ class OfficeEdit extends Component {
   }
 }
 
-export default OfficeEdit;
+export default EditUser;
