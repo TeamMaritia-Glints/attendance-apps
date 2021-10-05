@@ -3,7 +3,7 @@ import Router from "next/router";
 import Link from "next/link";
 import Layout from "../../../components/layout";
 import Cookies from "js-cookie";
-import Head  from "next/head";
+import Head from "next/head";
 
 class EditUser extends Component {
   constructor(props) {
@@ -19,8 +19,8 @@ class EditUser extends Component {
   }
 
   handleChange(event, field) {
-    console.log(event.target.value)
-    console.log(field)
+    console.log(event.target.value);
+    console.log(field);
     this.setState({
       [field]: event.target.value,
     });
@@ -50,7 +50,7 @@ class EditUser extends Component {
   }
 
   handleSubmit(e) {
-    console.log("execute")
+    console.log("execute");
     e.preventDefault();
 
     const edit = {
@@ -73,68 +73,71 @@ class EditUser extends Component {
   }
 
   render() {
+    return (
+      <>
+        <Head>
+          <title>Profile Worker</title>
+          <meta name="keywords" content="editUser" />
+        </Head>
+        <Layout></Layout>
+        <div className="sm:bg-wave bg-no-repeat bg-bottom">
+          <div className="flex h-screen">
+            <div className="m-auto px-12">
+              <div className="p-[20px] sm:mb-[100px]">
+                <p className="mb-6 text-primary-blue">Edit Profile User</p>
+                <form onSubmit={this.handleSubmit}>
+                  <div className="flex gap-4 mb-[15px]">
+                    <input
+                      className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                      type="text"
+                      placeholder="Name"
+                      required
+                      value={this.state.name}
+                      onChange={(event) => this.handleChange(event, "name")}
+                    />
+                  </div>
+                  <div className="mb-[15px]">
+                    <input
+                      className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                      type="email"
+                      placeholder="Email"
+                      required
+                      value={this.state.email}
+                      onChange={(event) => this.handleChange(event, "email")}
+                    />
+                  </div>
+                  <div className="dropdown">
+                    <select
+                      required
+                      value={this.state.role}
+                      onChange={(event) => this.handleChange(event, "role")}
+                    >
+                      <option value="admin" type="select">
+                        Admin
+                      </option>
+                      <option value="employee">Employee</option>
+                    </select>
+                  </div>
+                  <Link href={`/admin/userManajemen`}>
+                    <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
+                      Cancel
+                    </button>
+                  </Link>
 
-return (
-    <>
-    <Head>
-        <title>Profile Worker</title>
-        <meta name="keywords" content="editUser" />
-      </Head>
-      <Layout></Layout>
-      <div className="sm:bg-wave bg-no-repeat bg-bottom">
-        <div className="flex h-screen">
-          <div className="m-auto px-12">
-            <div className="p-[20px] sm:mb-[100px]">
-              <p className="mb-6 text-primary-blue">Edit Profile User</p>
-              <form onSubmit={this.handleSubmit}>
-                <div className="flex gap-4 mb-[15px]">
-                  <input
-                    className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                    type="text"
-                    placeholder="Name"
-                    required
-                    value={this.state.name}
-                    onChange={(event) => this.handleChange(event, "name")}
-                  />
-                </div>
-                <div className="mb-[15px]">
-                  <input
-                    className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                    type="email"
-                    placeholder="Email"
-                    required
-                    value={this.state.email}
-                    onChange={(event) => this.handleChange(event, "email")}
-                  />
-                </div>
-                <div class="dropdown">
-                  <select 
-                   required
-                   value={this.state.role}
-                   onChange = {(event) => this.handleChange(event, "role")}> 
-                      <option value="admin" type="select">Admin</option>
-                      <option value="employee" >Employee</option>
-                  </select>
-                </div>
-                <Link href={`/admin/userManajemen`}>
-                <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
-                  Cancel
-                </button>
-                </Link>
-                
-                <button type ="submit" className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
-                  Submit
-                </button>
-                
-              </form>
-
+                  <button
+                    type="submit"
+                    className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue"
+                  >
+                    Submit
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </>
-)
-};
+      </>
+    );
+  }
 }
 
 export default EditUser;
