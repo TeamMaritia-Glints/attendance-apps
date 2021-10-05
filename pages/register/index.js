@@ -34,6 +34,8 @@ class Register extends Component {
       const decodedToken = jwtDecode(token);
       if (decodedToken.data.role === "admin") {
         Router.push("/admin");
+      } else if (decodedToken.data.role === "employee") {
+        Router.push("/user");
       }
     }
   }

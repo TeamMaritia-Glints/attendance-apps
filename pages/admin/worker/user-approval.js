@@ -22,7 +22,7 @@ class UserAcc extends Component {
     const role = localStorage.getItem("role");
 
     if (role === "employee") {
-      Router.push("#");
+      Router.push("/user");
     } else if (role === undefined) {
       Router.push("/login");
     }

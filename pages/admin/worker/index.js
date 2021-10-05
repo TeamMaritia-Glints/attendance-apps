@@ -6,18 +6,33 @@ import Cookies from "js-cookie";
 class User extends Component {
   constructor(props) {
     super(props);
-    this.state = { userData: [] };
+    this.state = {
+      userData: [],
+      authToken: Cookies.get("token")
+        ? Cookies.get("token")
+        : Cookies.get("refreshToken")
+        ? Cookies.get("refreshToken")
+        : undefined,
+    };
     this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   async componentDidMount() {
+    const role = localStorage.getItem("role");
+
+    if (role === "employee") {
+      Router.push("/user");
+    } else if (role === undefined) {
+      Router.push("/login");
+    }
+
     const res = await fetch(
       "https://attendance-employee.herokuapp.com/user?status=1&active=1",
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: Cookies.get("token"),
+          Authorization: this.state.authToken,
         },
       }
     );
@@ -37,7 +52,7 @@ class User extends Component {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: Cookies.get("token"),
+        Authorization: this.state.authToken,
       },
       body: JSON.stringify(payload),
     }).then(() => {

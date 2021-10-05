@@ -31,7 +31,7 @@ const Layout = ({ children }) => {
   return (
     <>
       <Head>
-        <title>Attendance App</title>
+        <title>Attendance App - Admin</title>
         <meta name="keywords" content="admin" />
       </Head>
 
