@@ -10,8 +10,8 @@ class EditUser extends Component {
     super(props);
     this.state = {
       name: "",
-      email: "",
       role: "",
+      office_id: null,
       id: "",
     };
     this.handleChange = this.handleChange.bind(this);
@@ -43,8 +43,8 @@ class EditUser extends Component {
     const data = await res.json();
     this.setState({
       name: data.data.name,
-      email: data.data.email,
       role: data.data.role,
+      office_id: data.data.Office ? data.data.Office.id : null,
       id: data.data.id,
     });
   }
@@ -55,10 +55,11 @@ class EditUser extends Component {
 
     const edit = {
       name: this.state.name,
-      email: this.state.email,
       role: this.state.role,
+      office_id : parseInt(this.state.office_id),
       status: true,
     };
+    console.log(edit)
 
     fetch(`https://attendance-employee.herokuapp.com/user/${this.state.id}`, {
       method: "PUT",
@@ -97,16 +98,6 @@ return (
                     onChange={(event) => this.handleChange(event, "name")}
                   />
                 </div>
-                <div className="mb-[15px]">
-                  <input
-                    className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                    type="email"
-                    placeholder="Email"
-                    required
-                    value={this.state.email}
-                    onChange={(event) => this.handleChange(event, "email")}
-                  />
-                </div>
                 <div class="dropdown">
                   <select 
                    required
@@ -115,6 +106,16 @@ return (
                       <option value="admin" type="select">Admin</option>
                       <option value="employee" >Employee</option>
                   </select>
+                </div>
+                <div>
+                  <input
+                   className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white" 
+                   type="number"
+                   placeholder="Office"
+                   required
+                   value={this.state.office_id}
+                   onChange = {(event) => this.handleChange(event, "office_id")}
+                  />
                 </div>
                 <Link href={`/admin/userManajemen`}>
                 <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">

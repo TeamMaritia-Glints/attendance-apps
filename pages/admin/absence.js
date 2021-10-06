@@ -1,12 +1,34 @@
-import React, { useState } from "react";
-import Image from "next/image";
-import Link from "next/link"
+import { Component } from "react";
 import Head from "next/head";
 import Layout from "../../components/layout";
+import Cookies from "js-cookie";
 
 
-const Absence = () => {
-  const [Absence] = useState([]);
+class Absence extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { absenceData: [] };
+  }
+
+  async componentDidMount() {
+    const res = await fetch(
+      "https://attendance-employee.herokuapp.com/attendance/employee-absence-report?year=2021&month=10",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type" :"application/json",
+          Authorization: Cookies.get("token"),
+        },
+      }
+    );
+    const data = await res.json();
+    console.log(data)
+    this.setState({ absenceData: data.data.absenceReport});
+  }
+  
+
+  render() {
+    const { absenceData } = this.state;
   
 
   return (
@@ -18,7 +40,7 @@ const Absence = () => {
      <Layout></Layout>  
      <div className="sm:bg-wave bg-no-repeat bg-bottom">
       <div className="flex h-screen">     
-        <div //className="m-auto px-12"
+        <div className="w-full mx-auto"
         >
             <div>
                 <h1>
@@ -26,16 +48,9 @@ const Absence = () => {
                 </h1>
             </div>
 
-              <table className="table-auto">
+              <table className="justify-center items-center w-full bg-transparent border-collapse">
                 <thead>
                   <tr>
-                    <th
-                      className={
-                        "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
-                      }
-                    >
-                      No
-                    </th>
                     <th
                       className={
                         "px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold text-left "
@@ -60,11 +75,20 @@ const Absence = () => {
                     
                   </tr>
                 </thead>
-                <tbody>
-                <div className="w-full justify-center items-center flex flex-col p-6">
-                
-                                  
-                </div>
+                <tbody className="divide-y">
+                {absenceData.map((absence) => (
+                          <tr key={absence.EmployeeId}>
+                            <th className="font-normal px-6 py-2">
+                              {absence.User.name}
+                            </th>
+                            <th className="font-normal px-6 py-2">
+                              {absence.User.role}
+                            </th>
+                            <th className="font-normal px-6 py-2">
+                              {absence["absence count"]}
+                            </th> 
+                          </tr>
+                ))}
                 </tbody>
               </table>
              
@@ -75,6 +99,7 @@ const Absence = () => {
               </>
             
   );
+};
 };
 
 

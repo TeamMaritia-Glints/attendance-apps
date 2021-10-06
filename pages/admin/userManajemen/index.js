@@ -25,6 +25,8 @@ class User extends Component {
     );
     const data = await res.json();
     this.setState({ userData: data.data });
+// console.log(data.data [0].Office.id);
+// console.log(data.data.Office.id);
   }
 
   handleUpdate(e, type) {
@@ -52,7 +54,7 @@ class User extends Component {
 
   render() {
     const { userData } = this.state;
-
+  console.log(userData)
 
   return (
     
@@ -66,7 +68,7 @@ class User extends Component {
       <div className="flex h-screen">     
         <div className="w-full mx-auto"> 
           <div className="text-right">    
-          <Link href="../../admin/user/userAcc">
+          <Link href="../../admin/userManajemen/userAcc">
                <button
                   className="bg-yellow-500 text-white active:bg-blue-600 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                   type="button"
@@ -83,6 +85,7 @@ class User extends Component {
                   <th className="font-normal px-6 py-2">Name</th>
                   <th className="font-normal px-6 py-2">Role</th>
                   <th className="font-normal px-6 py-2">Email</th>
+                  <th className="font-normal px-6 py-2">Office</th>
                   <th className="font-normal px-6 py-2">Action</th>
                   </tr>
                 </thead>
@@ -101,8 +104,11 @@ class User extends Component {
                             <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left font-bold">
                               {x.email}
                             </th>
+                            <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left font-bold">
+                              {x.Office ? x.Office.id : "No Office"}
+                            </th>
                             <div className="inline-flex gap-4">
-                                <Link href={`/admin/user/${x.id}`}>
+                                <Link href={`/admin/userManajemen/${x.id}`}>
                                   <a className="cursor-pointer">
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
