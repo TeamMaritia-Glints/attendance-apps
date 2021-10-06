@@ -11,8 +11,6 @@ class ForgotPassword extends Component {
     super(props);
     this.state = {
       email: "",
-      success: null,
-      error: null,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -57,11 +55,17 @@ class ForgotPassword extends Component {
             throw Error(data.message);
           }
         } else {
-          this.setState({ success: data.message, error: null });
+          swal({
+            text: data.message,
+            icon: "success",
+          });
         }
       })
       .catch((err) => {
-        this.setState({ success: null, error: err.message });
+        swal({
+          text: err.message,
+          icon: "warning",
+        });
       });
   };
 
@@ -102,14 +106,6 @@ class ForgotPassword extends Component {
                   <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
                     Send
                   </button>
-                  {this.state.success !== null && (
-                    <p className="mt-4 text-[green] w-72">
-                      {this.state.success}
-                    </p>
-                  )}
-                  {this.state.error !== null && (
-                    <p className="mt-4 text-[red] w-72">{this.state.error}</p>
-                  )}
                 </form>
                 <p className="mt-4 text-primary-blue">
                   Back to{" "}

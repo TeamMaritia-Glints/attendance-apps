@@ -12,8 +12,6 @@ class ResetPassword extends Component {
       password: "",
       confirmPassword: "",
       isSame: false,
-      success: null,
-      error: null,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -43,8 +41,6 @@ class ResetPassword extends Component {
 
     const token = urlParams.get("token");
     const id = urlParams.get("id");
-    // const [token] = useState(tokenUrl);
-    // const [id] = useState(idUrl);
 
     const resetData = {
       password: this.state.password,
@@ -64,13 +60,23 @@ class ResetPassword extends Component {
       })
       .then((data) => {
         if (data.status === "error") {
-          throw Error(data.message);
+          if (typeof data.message === "object") {
+            throw Error(data.message[0].message);
+          } else {
+            throw Error(data.message);
+          }
         } else {
-          this.setState({ success: data.message, error: null });
+          swal({
+            text: data.message,
+            icon: "success",
+          });
         }
       })
       .catch((err) => {
-        this.setState({ success: null, error: err.message });
+        swal({
+          text: err.message,
+          icon: "warning",
+        });
       });
   };
 
@@ -138,14 +144,6 @@ class ResetPassword extends Component {
                     <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue cursor-not-allowed">
                       Reset Password
                     </button>
-                  )}
-                  {this.state.success !== null && (
-                    <p className="mt-4 text-[green] w-72">
-                      {this.state.success}
-                    </p>
-                  )}
-                  {this.state.error !== null && (
-                    <p className="mt-4 text-[red] w-72">{this.state.error}</p>
                   )}
                 </form>
                 <p className="mt-4 text-primary-blue">
