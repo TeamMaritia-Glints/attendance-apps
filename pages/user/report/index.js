@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Router from "next/router";
 import Cookies from "js-cookie";
+import swal from "sweetalert";
 
 class Report extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class Report extends Component {
         ? Cookies.get("refreshToken")
         : undefined,
     };
+    this.logOut = this.logOut.bind(this);
   }
 
   async componentDidMount() {
@@ -67,6 +69,10 @@ class Report extends Component {
       Cookies.remove("refreshToken");
       localStorage.removeItem("name");
       localStorage.removeItem("role");
+      swal({
+        text: "Logout Successful!",
+        icon: "success",
+      });
       Router.push("/");
     });
   }

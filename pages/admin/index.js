@@ -22,7 +22,7 @@ class Admin extends Component {
     this.handleUpdate = this.handleUpdate.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const role = localStorage.getItem("role");
 
     if (this.state.authToken === undefined) {
@@ -37,8 +37,8 @@ class Admin extends Component {
       }
     }
 
-    const res = await fetch(
-      "https://attendance-employee.herokuapp.com/attendance/user-attendances?year=2021&month=10&day=01",
+    fetch(
+      "https://attendance-employee.herokuapp.com/attendance/employee-absence-report",
       {
         method: "GET",
         headers: {
@@ -46,9 +46,14 @@ class Admin extends Component {
           Authorization: this.state.authToken,
         },
       }
-    );
-    const data = await res.json();
-    this.setState({ attendanceData: data.data });
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        this.setState({ attendanceData: data.data });
+      });
+
     this.interval = setInterval(() => this.setState({ date: Date() }), 1000);
   }
 
