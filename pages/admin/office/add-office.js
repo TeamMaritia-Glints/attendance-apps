@@ -3,6 +3,7 @@ import Router from "next/router";
 import Link from "next/link";
 import Layout from "../../../components/layout";
 import Cookies from "js-cookie";
+import swal from "sweetalert";
 
 class AddOffice extends Component {
   constructor(props) {
@@ -31,16 +32,16 @@ class AddOffice extends Component {
   async componentDidMount() {
     const role = localStorage.getItem("role");
 
-    if (role === "employee") {
-      Router.push("/user");
-    } else if (role === undefined) {
-      Router.push("/login");
-    }
-
     if (this.state.authToken === undefined) {
       localStorage.removeItem("name");
       localStorage.removeItem("role");
       Router.push("/login");
+    } else {
+      if (role === "employee") {
+        Router.push("/user");
+      } else if (role === undefined) {
+        Router.push("/login");
+      }
     }
   }
 
@@ -61,9 +62,17 @@ class AddOffice extends Component {
         Authorization: this.state.authToken,
       },
       body: JSON.stringify(addData),
-    }).then(() => {
-      Router.push("/admin/office");
-    });
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        swal({
+          text: data.message,
+          icon: "success",
+        });
+        Router.push("/admin/office");
+      });
   }
 
   render() {

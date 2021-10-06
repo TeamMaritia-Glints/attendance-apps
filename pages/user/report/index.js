@@ -1,14 +1,56 @@
+import { Component } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { Component } from "react";
-import Cookies from "js-cookie";
 import Router from "next/router";
+import Cookies from "js-cookie";
 
 class Report extends Component {
   constructor(props) {
     super(props);
-    this.state = { officeData: [] };
+    this.state = {
+      reportData: [],
+      authToken: Cookies.get("token")
+        ? Cookies.get("token")
+        : Cookies.get("refreshToken")
+        ? Cookies.get("refreshToken")
+        : undefined,
+    };
+  }
+
+  async componentDidMount() {
+    const role = localStorage.getItem("role");
+
+    if (this.state.authToken === undefined) {
+      localStorage.removeItem("name");
+      localStorage.removeItem("role");
+      Router.push("/login");
+    } else {
+      if (role === "admin") {
+        Router.push("/admin");
+      } else if (role === undefined) {
+        Router.push("/login");
+      }
+    }
+
+    if (this.state.authToken === undefined) {
+      localStorage.removeItem("name");
+      localStorage.removeItem("role");
+      Router.push("/login");
+    }
+
+    const res = await fetch(
+      "https://attendance-employee.herokuapp.com/attendance/user-attendance-report?year=2021&month=10",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.state.authToken,
+        },
+      }
+    );
+    const data = await res.json();
+    this.setState({ reportData: data.data });
   }
 
   logOut(e) {
@@ -18,7 +60,7 @@ class Report extends Component {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: Cookies.get("token"),
+        Authorization: this.state.authToken,
       },
     }).then(() => {
       Cookies.remove("token");
@@ -29,28 +71,13 @@ class Report extends Component {
     });
   }
 
-  async componentDidMount() {
-    const res = await fetch(
-      "https://attendance-employee.herokuapp.com/attendance/user-attendance-report?year=2021&month=10",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: Cookies.get("token"),
-        },
-      }
-    );
-    const data = await res.json();
-    this.setState({ officeData: data.data });
-  }
   render() {
-    const { officeData } = this.state;
-    console.log(officeData);
+    const { reportData } = this.state;
     return (
       <>
         <Head>
           <title>Report</title>
-          <meta name="keywords" content="dashboard" />
+          <meta name="keywords" content="report" />
         </Head>
 
         <div className="flex flex-col h-screen">
@@ -159,29 +186,30 @@ class Report extends Component {
                     </th>
                   </tr>
                 </thead>
-                {officeData &&
-                  officeData.map((absence) => (
-                    <tr key={absence.employeeId}>
-                      <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">
-                        {" "}
-                        {absence.User.name}
-                      </th>
-                      <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">
-                        {absence.date}
-                      </th>
-                      <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">
-                        {" "}
-                        {absence.checkInTime}
-                      </th>
-                      <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">
-                        {absence.checkOutTime}
-                      </th>
-                      <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">
-                        {absence.workingHourView}
-                      </th>
-                    </tr>
-                  ))}
-                <tbody></tbody>
+                <tbody>
+                  {reportData &&
+                    reportData.map((absence, index) => (
+                      <tr key={index}>
+                        <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">
+                          {" "}
+                          {absence.User.name}
+                        </th>
+                        <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">
+                          {absence.date}
+                        </th>
+                        <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">
+                          {" "}
+                          {absence.checkInTime}
+                        </th>
+                        <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">
+                          {absence.checkOutTime}
+                        </th>
+                        <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">
+                          {absence.workingHourView}
+                        </th>
+                      </tr>
+                    ))}
+                </tbody>
               </table>
             </div>
           </main>

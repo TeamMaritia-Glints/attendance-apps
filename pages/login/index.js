@@ -5,6 +5,7 @@ import Link from "next/link";
 import Router from "next/router";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
+import swal from "sweetalert";
 
 class Login extends Component {
   constructor(props) {
@@ -12,7 +13,6 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
-      error: null,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -70,14 +70,25 @@ class Login extends Component {
 
           const role = localStorage.getItem("role");
           if (role === "admin") {
+            swal({
+              text: data.message,
+              icon: "success",
+            });
             Router.push("/admin");
           } else if (role === "employee") {
+            swal({
+              text: data.message,
+              icon: "success",
+            });
             Router.push("/user");
           }
         }
       })
       .catch((err) => {
-        this.setState({ error: err.message });
+        swal({
+          text: err.message,
+          icon: "warning",
+        });
       });
   };
 
@@ -129,9 +140,6 @@ class Login extends Component {
                   <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
                     Sign In
                   </button>
-                  {this.state.error !== null && (
-                    <p className="mt-4 text-[red] w-72">{this.state.error}</p>
-                  )}
                 </form>
                 <p className="mt-4 text-primary-green">
                   <span>

@@ -1,24 +1,46 @@
+import { Component } from "react";
 import Head from "next/head";
 import Image from "next/image";
-import { Component } from "react";
 import Link from "next/link";
+import Router from "next/router";
 import Geo from "./location";
 import Cookies from "js-cookie";
-import Router from "next/router";
+import swal from "sweetalert";
 
 class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: [],
       checkInTime: "",
       checkInLocation: "",
       lat: "",
       lng: "",
+      authToken: Cookies.get("token")
+        ? Cookies.get("token")
+        : Cookies.get("refreshToken")
+        ? Cookies.get("refreshToken")
+        : undefined,
     };
     this.handleCheckin = this.handleCheckin.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
   }
+
   componentDidMount() {
+    const role = localStorage.getItem("role");
+
+    if (this.state.authToken === undefined) {
+      localStorage.removeItem("name");
+      localStorage.removeItem("role");
+      Router.push("/login");
+    } else {
+      if (role === "admin") {
+        Router.push("/admin");
+      } else if (role === undefined) {
+        Router.push("/login");
+      }
+    }
+
     if (!!navigator.geolocation) {
       navigator.geolocation.watchPosition(
         (position) => {
@@ -27,72 +49,100 @@ class User extends Component {
             lng: position.coords.longitude,
           });
         },
-        (err) => console.log(err),
+        (err) => err,
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 10000 }
       );
     } else {
-      alert("El navegador no soporta la geolocalización,");
+      alert("The browser does not support geolocation");
     }
   }
 
-  async handleCheckin() {
-    // const payload = {
-    //   "checkInTime": new Date(),
-    //   "checkInLocation": {
-    //     "longitude": this.state.lng,
-    //     "latitude": this.state.lat
-    //   }
-    // }
+  handleCheckin() {
     const payload = {
       checkInTime: new Date(),
       checkInLocation: {
-        longitude: 106.8972414966973,
-        latitude: -6.371567590490629,
+        longitude: this.state.lng,
+        latitude: this.state.lat,
       },
     };
-    const res = await fetch(
-      "https://attendance-employee.herokuapp.com/attendance/check-in",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: Cookies.get("token"),
-        },
-        body: JSON.stringify(payload),
-      }
-    );
-    // const data = await res.json();
-    console.log("got response", res);
+    // const payload = {
+    //   checkInTime: new Date(),
+    //   checkInLocation: {
+    //     longitude: 106.7973372624521,
+    //     latitude: -6.271461420612064,
+    //   },
+    // };
+    fetch("https://attendance-employee.herokuapp.com/attendance/check-in", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: this.state.authToken,
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.status === "error") {
+          throw Error(data.message);
+        } else {
+          swal({
+            text: data.message,
+            icon: "success",
+          });
+        }
+      })
+      .catch((err) => {
+        swal({
+          text: err.message,
+          icon: "warning",
+        });
+      });
   }
 
-  async handleCheckout() {
-    // const payload = {
-    //   "checkInTime": new Date(),
-    //   "checkInLocation": {
-    //     "longitude": this.state.lng,
-    //     "latitude": this.state.lat
-    //   }
-    // }
+  handleCheckout() {
     const payload = {
       checkOutTime: new Date(),
       checkOutLocation: {
-        longitude: 106.8972414966973,
-        latitude: -6.371567590490629,
+        longitude: this.state.lng,
+        latitude: this.state.lat,
       },
     };
-    const res = await fetch(
-      "https://attendance-employee.herokuapp.com/attendance/check-out",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: Cookies.get("token"),
-        },
-        body: JSON.stringify(payload),
-      }
-    );
-    // const data = await res.json();
-    console.log("got response", res);
+    // const payload = {
+    //   checkOutTime: new Date(),
+    //   checkOutLocation: {
+    //     longitude: 106.7973372624521,
+    //     latitude: -6.271461420612064,
+    //   },
+    // };
+    fetch("https://attendance-employee.herokuapp.com/attendance/check-out", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: this.state.authToken,
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.status === "error") {
+          throw Error(data.message);
+        } else {
+          swal({
+            text: data.message,
+            icon: "success",
+          });
+        }
+      })
+      .catch((err) => {
+        swal({
+          text: err.message,
+          icon: "warning",
+        });
+      });
   }
 
   logOut(e) {
@@ -102,7 +152,7 @@ class User extends Component {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: Cookies.get("token"),
+        Authorization: this.state.authToken,
       },
     }).then(() => {
       Cookies.remove("token");
@@ -187,6 +237,7 @@ class User extends Component {
           </header>
           <main className="p-4 flex-grow bg-white flex-col">
             <Geo />
+            <div className="md:h-[80px] h-[80px] p-2 bg-gray place-content-center"></div>
           </main>
           <footer className="md:h-[80px] h-[135px] p-2 bg-dark-green place-content-center">
             <div className="align-middle place-content-center md:flex grid">
