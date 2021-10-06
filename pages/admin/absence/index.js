@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import Router from "next/router";
 import Layout from "../../../components/layout";
 
 const Absence = () => {

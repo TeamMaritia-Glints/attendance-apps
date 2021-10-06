@@ -1,6 +1,6 @@
 import { Component } from "react";
 import Link from "next/link";
-import Head from "next/head";
+import Router from "next/router";
 import Layout from "../../../components/layout";
 import Cookies from "js-cookie";
 
@@ -76,10 +76,6 @@ class UserAcc extends Component {
 
     return (
       <>
-        <Head>
-          <title>User Page</title>
-          <meta name="keywords" content="userAcc" />
-        </Head>
         <Layout>
           <div className="px-12">
             <h1>User Waiting for Approval</h1>

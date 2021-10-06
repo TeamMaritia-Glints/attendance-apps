@@ -75,11 +75,11 @@ class Login extends Component {
               icon: "success",
             });
             Router.push("/admin");
+          } else if (role === "employee") {
             swal({
               text: data.message,
               icon: "success",
             });
-          } else if (role === "employee") {
             Router.push("/user");
           }
         }

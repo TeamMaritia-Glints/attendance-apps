@@ -32,16 +32,16 @@ class AddOffice extends Component {
   async componentDidMount() {
     const role = localStorage.getItem("role");
 
-    if (role === "employee") {
-      Router.push("/user");
-    } else if (role === undefined) {
-      Router.push("/login");
-    }
-
     if (this.state.authToken === undefined) {
       localStorage.removeItem("name");
       localStorage.removeItem("role");
       Router.push("/login");
+    } else {
+      if (role === "employee") {
+        Router.push("/user");
+      } else if (role === undefined) {
+        Router.push("/login");
+      }
     }
   }
 

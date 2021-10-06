@@ -21,16 +21,16 @@ class Office extends Component {
   async componentDidMount() {
     const role = localStorage.getItem("role");
 
-    if (role === "employee") {
-      Router.push("/user");
-    } else if (role === undefined) {
-      Router.push("/login");
-    }
-
     if (this.state.authToken === undefined) {
       localStorage.removeItem("name");
       localStorage.removeItem("role");
       Router.push("/login");
+    } else {
+      if (role === "employee") {
+        Router.push("/user");
+      } else if (role === undefined) {
+        Router.push("/login");
+      }
     }
 
     const res = await fetch(
@@ -44,6 +44,7 @@ class Office extends Component {
       }
     );
     const data = await res.json();
+    console.log(data);
     this.setState({ officeData: data.data });
   }
 
