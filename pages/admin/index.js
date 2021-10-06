@@ -1,10 +1,9 @@
 import { Component } from "react";
 import Link from "next/link";
+import Head from "next/head";
 import Router from "next/router";
 import Layout from "../../components/layout";
 import Cookies from "js-cookie";
-import Head from "next/head";
-import { data } from "autoprefixer";
 import swal from "sweetalert";
 
 class Admin extends Component {
@@ -134,10 +133,14 @@ class Admin extends Component {
                         {attendance.User.role}
                       </th>
                       <th className="font-normal px-6 py-2">
-                        {attendance.checkInTime}
+                        {attendance.checkInTime
+                          .replace("T", " / ")
+                          .replace(".000Z", "")}
                       </th>
                       <th className="font-normal px-6 py-2">
-                        {attendance.checkOutTime}
+                        {attendance.checkOutTime
+                          .replace("T", " / ")
+                          .replace(".000Z", "")}
                       </th>
                       <th className="font-normal px-6 py-2">
                         {attendance.workingHourView}
