@@ -3,6 +3,7 @@ import Router from "next/router";
 import Link from "next/link";
 import Layout from "../../../components/layout";
 import Cookies from "js-cookie";
+import swal from "sweetalert";
 
 class OfficeEdit extends Component {
   constructor(props) {
@@ -85,9 +86,17 @@ class OfficeEdit extends Component {
         Authorization: this.state.authToken,
       },
       body: JSON.stringify(editData),
-    }).then(() => {
-      Router.push("/admin/office");
-    });
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        swal({
+          text: data.message,
+          icon: "success",
+        });
+        Router.push("/admin/office");
+      });
   }
 
   render() {

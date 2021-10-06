@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
+import swal from "sweetalert";
 
 class ResetPassword extends Component {
   constructor(props) {

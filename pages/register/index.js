@@ -73,8 +73,8 @@ class Register extends Component {
           }
         } else {
           swal({
-            text: "Account has been created!",
-            button: { text: "Close", closeModal: true },
+            text: data.message,
+            icon: "success",
           });
           Router.push("/login");
         }
