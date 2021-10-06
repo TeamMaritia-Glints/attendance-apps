@@ -44,7 +44,6 @@ class Office extends Component {
       }
     );
     const data = await res.json();
-    console.log(data);
     this.setState({ officeData: data.data });
   }
 
