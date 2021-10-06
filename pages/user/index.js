@@ -36,20 +36,20 @@ class User extends Component {
   }
 
   async handleCheckin() {
-    // const payload = {
-    //   "checkInTime": new Date(),
-    //   "checkInLocation": {
-    //     "longitude": this.state.lng,
-    //     "latitude": this.state.lat
-    //   }
-    // }
     const payload = {
       checkInTime: new Date(),
       checkInLocation: {
-        longitude: 106.8972414966973,
-        latitude: -6.371567590490629,
+        longitude: this.state.lng,
+        latitude: this.state.lat,
       },
     };
+    // const payload = {
+    //   checkInTime: new Date(),
+    //   checkInLocation: {
+    //     longitude: 106.8972414966973,
+    //     latitude: -6.371567590490629,
+    //   },
+    // };
     const res = await fetch(
       "https://attendance-employee.herokuapp.com/attendance/check-in",
       {
@@ -66,20 +66,20 @@ class User extends Component {
   }
 
   async handleCheckout() {
-    // const payload = {
-    //   "checkInTime": new Date(),
-    //   "checkInLocation": {
-    //     "longitude": this.state.lng,
-    //     "latitude": this.state.lat
-    //   }
-    // }
     const payload = {
-      checkOutTime: new Date(),
-      checkOutLocation: {
-        longitude: 106.8972414966973,
-        latitude: -6.371567590490629,
+      checkInTime: new Date(),
+      checkInLocation: {
+        longitude: this.state.lng,
+        latitude: this.state.lat,
       },
     };
+    // const payload = {
+    //   checkOutTime: new Date(),
+    //   checkOutLocation: {
+    //     longitude: 106.8972414966973,
+    //     latitude: -6.371567590490629,
+    //   },
+    // };
     const res = await fetch(
       "https://attendance-employee.herokuapp.com/attendance/check-out",
       {

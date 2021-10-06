@@ -66,7 +66,11 @@ class Register extends Component {
       })
       .then((data) => {
         if (data.status === "error") {
-          throw Error(data.message);
+          if (typeof data.message === "object") {
+            throw Error(data.message[0].message);
+          } else {
+            throw Error(data.message);
+          }
         } else {
           Router.push("/login");
         }
@@ -111,6 +115,7 @@ class Register extends Component {
                       className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
                       type="text"
                       placeholder="First Name"
+                      pattern="^[A-Za-z]+$"
                       required
                       value={this.state.firstName}
                       onChange={(event) =>
@@ -121,6 +126,7 @@ class Register extends Component {
                       className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
                       type="text"
                       placeholder="Last Name"
+                      pattern="^[A-Za-z]+$"
                       value={this.state.lastName}
                       onChange={(event) => this.handleChange(event, "lastName")}
                     />
