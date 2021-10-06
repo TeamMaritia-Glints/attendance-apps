@@ -22,7 +22,7 @@ class MyComponents extends Component {
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 10000 },
       );
     } else {
-      alert('El navegador no soporta la geolocalización,')
+      alert('The browser does not support geolocation')
     }
   }
   render() {

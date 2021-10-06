@@ -5,6 +5,7 @@ import Link from "next/link";
 import Geo from "./location";
 import Cookies from "js-cookie";
 import Router from "next/router";
+import swal from "sweetalert";
 
 class User extends Component {
   constructor(props) {
@@ -13,7 +14,9 @@ class User extends Component {
       checkInTime: "",
       checkInLocation: "",
       lat: '',
-      lng: ''
+      lng: '',
+      error: null,
+      data: []
     };
     this.handleCheckin = this.handleCheckin.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
@@ -30,11 +33,11 @@ class User extends Component {
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 10000 },
       );
     } else {
-      alert('El navegador no soporta la geolocalización,')
+      alert('The browser does not support geolocation')
     }
   }
 
-  async handleCheckin() {
+ handleCheckin() {
     // const payload = {
     //   "checkInTime": new Date(), 
     //   "checkInLocation": {
@@ -45,29 +48,44 @@ class User extends Component {
     const payload = {
       "checkInTime": new Date(), 
       "checkInLocation": {
-        "longitude": 106.8972414966973,
-        "latitude": -6.371567590490629
+        "longitude": 106.7973372624521,
+        "latitude": -6.271461420612064
       }
     }
-    const res = await fetch(
-      'https://attendance-employee.herokuapp.com/attendance/check-in',
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: Cookies.get("token"),
-        },
-        body: JSON.stringify(payload)
-      }
-    );
-    // const data = await res.json();
-    console.log('got response', res);
-  }
+    fetch("https://attendance-employee.herokuapp.com/attendance/check-in", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: Cookies.get("token"),
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.status === "error") {
+          throw Error(data.message);
+        } else {
+          swal({
+            text: data.message,
+            icon: "success",
+          });
+        }
+      })
+      .catch((err) => {
+        swal({
+          text: err.message,
+          icon: "warning",
+        });
+      });
+    }
 
-  async handleCheckout() {
+
+   handleCheckout() {
     // const payload = {
-    //   "checkInTime": new Date(), 
-    //   "checkInLocation": {
+    //   "checkOutTime": new Date(), 
+    //   "checkOutLocation": {
     //     "longitude": this.state.lng,
     //     "latitude": this.state.lat
     //   }
@@ -75,24 +93,38 @@ class User extends Component {
     const payload = {
       "checkOutTime": new Date(), 
       "checkOutLocation": {
-        "longitude": 106.8972414966973,
-        "latitude": -6.371567590490629
+        "longitude": 106.7973372624521,
+        "latitude": -6.271461420612064
       }
     }
-    const res = await fetch(
-      'https://attendance-employee.herokuapp.com/attendance/check-out',
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: Cookies.get("token"),
-        },
-        body: JSON.stringify(payload)
-      }
-    );
-    // const data = await res.json();
-    console.log('got response', res);
-  }
+    fetch("https://attendance-employee.herokuapp.com/attendance/check-out", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: Cookies.get("token"),
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.status === "error") {
+          throw Error(data.message);
+        } else {
+          swal({
+            text: data.message,
+            icon: "success",
+          });
+        }
+      })
+      .catch((err) => {
+        swal({
+          text: err.message,
+          icon: "warning",
+        });
+      });
+    }
 
   logOut(e){
     e.preventDefault();
@@ -116,7 +148,6 @@ class User extends Component {
         <title>Dashboard</title>
         <meta name="keywords" content="dashboard" />
       </Head>
-
 
       <div className="flex flex-col h-screen">
   <header className="h-[100px] md:h-[160px] bg-light-green text-dark-green">
@@ -176,6 +207,8 @@ class User extends Component {
   </header>
   <main className="p-4 flex-grow bg-white flex-col">
 <Geo/>
+{this.state.error !== null && <p className="text-sm text-light-green">{this.state.error}</p>}
+<div className= "md:h-[80px] h-[80px] p-2 bg-gray place-content-center"></div>
   </main>
   <footer className="md:h-[80px] h-[135px] p-2 bg-dark-green place-content-center">
     <div className="align-middle place-content-center md:flex grid">
