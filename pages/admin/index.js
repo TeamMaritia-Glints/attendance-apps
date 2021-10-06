@@ -17,6 +17,7 @@ class Admin extends Component {
         ? Cookies.get("refreshToken")
         : undefined,
     };
+    this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   async componentDidMount() {
@@ -55,11 +56,18 @@ class Admin extends Component {
   
   handleUpdate(e, type) {
     let payload = {}
-    if (type === 'decline') {
+    if (type === 'Declined') {
       payload = {
-        status: "Decline"
+        status: "Declined"
+      };
+    } else if (type === "Approved") {
+        payload ={
+          status: "Approved"
+        };
       }
-    fetch(`https://attendance-employee.herokuapp.com/attendance/update-attendance-status?${e.id}`, {
+      let popUpConfirm = confirm(`Are you sure want to ${type}?`);
+      if (popUpConfirm === true) {
+      fetch(`https://attendance-employee.herokuapp.com/attendance/update-attendance-status?${e.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -69,8 +77,11 @@ class Admin extends Component {
       }).then(() => {
         this.componentDidMount();
       });
-    }  
-  }
+      } else {
+        return true;
+      } 
+    }
+  
 
   render() {
     const { attendanceData } = this.state;
@@ -99,12 +110,12 @@ class Admin extends Component {
               <table className="min-w-full divide-y">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="font-normal px-6 py-2">No</th>
                     <th className="font-normal px-6 py-2">Name</th>
                     <th className="font-normal px-6 py-2">Role</th>
                     <th className="font-normal px-6 py-2">Check In</th>
                     <th className="font-normal px-6 py-2">Check Out</th>
                     <th className="font-normal px-6 py-2">Work Hour</th>
+                    <th className="font-normal px-6 py-2">Status</th>
                     <th className="font-normal px-6 py-2">Action</th>
                   </tr>
                 </thead>
@@ -132,25 +143,22 @@ class Admin extends Component {
                           
                     <td className="font-normal px-6 py-2">
                       <div className="inline-flex gap-4">
-                        <Link href="#">
-                          <a className="cursor-pointer">
-                            <svg
+                        <a className="cursor-pointer"
+                            onClick={() => this.handleUpdate(attendance, "Approved")}
+                          >
+                          <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="w-6 h-6 text-blue-400"
-                              fill="none"
+                              width="24"
+                              height="24"
                               viewBox="0 0 24 24"
-                              stroke="currentColor"
+                              fill="green"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
+                              <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z" />
                             </svg>
                           </a>
-                        </Link>
-                        <a className="cursor-pointer">
+                        <a className="cursor-pointer"
+                            onClick={() => this.handleUpdate(attendance, "Declined")}
+                          >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="w-6 h-6 text-red-400"

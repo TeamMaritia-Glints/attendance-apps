@@ -11,6 +11,7 @@ class EditUser extends Component {
       name: "",
       email: "",
       role: "",
+      office_id: null,
       id: "",
       authToken: Cookies.get("token")
         ? Cookies.get("token")
@@ -61,6 +62,7 @@ class EditUser extends Component {
       name: data.data.name,
       email: data.data.email,
       role: data.data.role,
+      office_id: data.data.Office ? data.data.Office.id : null,
       id: data.data.id,
     });
   }
@@ -72,6 +74,7 @@ class EditUser extends Component {
       name: this.state.name,
       email: this.state.email,
       role: this.state.role,
+      office_id: parseInt(this.state.office_id),
       status: true,
     };
 
@@ -130,6 +133,16 @@ class EditUser extends Component {
                   <option value="employee">Employee</option>
                 </select>
               </div>
+              <div>
+                  <input
+                   className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white" 
+                   type="number"
+                   placeholder="Office"
+                   required
+                   value={this.state.office_id}
+                   onChange = {(event) => this.handleChange(event, "office_id")}
+                  />
+                </div>
               <button
                 type="submit"
                 className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue"

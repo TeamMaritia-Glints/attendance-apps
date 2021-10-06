@@ -42,18 +42,23 @@ class UserAcc extends Component {
         status: true
       }
     }
- console.log(payload)
+    let popUpConfirm = confirm("Press a button!");
+    if (popUpConfirm === true) {
+      console.log("popUpConfirm")
+    } else {
+      console.log("rejected")
+    }
 
-    fetch(`https://attendance-employee.herokuapp.com/user/${e.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: Cookies.get("token"),
-      },
-      body: JSON.stringify(payload)
-    }).then(() => {
-      this.componentDidMount();
-    });
+    // fetch(`https://attendance-employee.herokuapp.com/user/${e.id}`, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: Cookies.get("token"),
+    //   },
+    //   body: JSON.stringify(payload)
+    // }).then(() => {
+    //   this.componentDidMount();
+    // });
   }
 
   render() {

@@ -58,8 +58,10 @@ class UserAcc extends Component {
         status: true,
       };
     }
-
-    fetch(`https://attendance-employee.herokuapp.com/user/${e.id}`, {
+    let popUpConfirm = confirm(`Are you sure want to ${type}?`);
+    if (popUpConfirm === true) {
+      
+      fetch(`https://attendance-employee.herokuapp.com/user/${e.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -69,6 +71,11 @@ class UserAcc extends Component {
     }).then(() => {
       this.componentDidMount();
     });
+    } else {
+      return true;
+    }
+
+    
   }
 
   render() {

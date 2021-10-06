@@ -47,17 +47,19 @@ class User extends Component {
         active: false,
       };
     }
-
-    fetch(`https://attendance-employee.herokuapp.com/user/${e.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: this.state.authToken,
-      },
-      body: JSON.stringify(payload),
-    }).then(() => {
+    let popUpConfirm = confirm(`Are you sure want to ${type}?`);
+    if (popUpConfirm === true) {
+        fetch(`https://attendance-employee.herokuapp.com/user/${e.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.state.authToken,
+        },
+        body: JSON.stringify(payload),
+      }).then(() => {
       this.componentDidMount();
     });
+  }
   }
 
   render() {
@@ -85,6 +87,7 @@ class User extends Component {
                     <th className="font-normal px-6 py-2">Name</th>
                     <th className="font-normal px-6 py-2">Role</th>
                     <th className="font-normal px-6 py-2">Email</th>
+                    <th className="font-normal px-6 py-2">Office</th>
                     <th className="font-normal px-6 py-2">Action</th>
                   </tr>
                 </thead>
@@ -95,6 +98,8 @@ class User extends Component {
                       <td className="font-normal px-6 py-2">{user.name}</td>
                       <td className="font-normal px-6 py-2">{user.role}</td>
                       <td className="font-normal px-6 py-2">{user.email}</td>
+                      <td className="font-normal px-6 py-2">{user.Office ? user.Office.id : "No Office"}</td>
+
                       <td className="font-normal px-6 py-2">
                         <div className="inline-flex gap-4">
                           <Link href={`/admin/worker/${user.id}`}>
