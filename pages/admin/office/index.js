@@ -3,6 +3,7 @@ import Link from "next/link";
 import Router from "next/router";
 import Layout from "../../../components/layout";
 import Cookies from "js-cookie";
+import swal from "sweetalert";
 
 class Office extends Component {
   constructor(props) {
@@ -20,16 +21,16 @@ class Office extends Component {
   async componentDidMount() {
     const role = localStorage.getItem("role");
 
-    if (role === "employee") {
-      Router.push("/user");
-    } else if (role === undefined) {
-      Router.push("/login");
-    }
-
     if (this.state.authToken === undefined) {
       localStorage.removeItem("name");
       localStorage.removeItem("role");
       Router.push("/login");
+    } else {
+      if (role === "employee") {
+        Router.push("/user");
+      } else if (role === undefined) {
+        Router.push("/login");
+      }
     }
 
     const res = await fetch(
@@ -47,14 +48,29 @@ class Office extends Component {
   }
 
   handleDelete(id) {
-    fetch(`https://attendance-employee.herokuapp.com/office/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: this.state.authToken,
-      },
-    }).then(() => {
-      this.componentDidMount();
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this office data!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        swal("Office data has been deleted!", {
+          icon: "success",
+        });
+        fetch(`https://attendance-employee.herokuapp.com/office/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: this.state.authToken,
+          },
+        }).then(() => {
+          this.componentDidMount();
+        });
+      } else {
+        swal("Action canceled!");
+      }
     });
   }
 

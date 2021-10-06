@@ -5,6 +5,7 @@ import Link from "next/link";
 import Router from "next/router";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
+import swal from "sweetalert";
 
 class Register extends Component {
   constructor(props) {
@@ -16,7 +17,6 @@ class Register extends Component {
       password: "",
       confirmPassword: "",
       isSame: false,
-      error: null,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -72,11 +72,18 @@ class Register extends Component {
             throw Error(data.message);
           }
         } else {
+          swal({
+            text: data.message,
+            icon: "success",
+          });
           Router.push("/login");
         }
       })
       .catch((err) => {
-        this.setState({ error: err.message });
+        swal({
+          text: err.message,
+          icon: "warning",
+        });
       });
   };
 
@@ -175,9 +182,6 @@ class Register extends Component {
                     <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue cursor-not-allowed">
                       Sign Up
                     </button>
-                  )}
-                  {this.state.error !== null && (
-                    <p className="mt-4 text-[red] w-72">{this.state.error}</p>
                   )}
                 </form>
                 <p className="mt-2 text-primary-blue">
