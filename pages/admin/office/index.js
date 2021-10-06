@@ -21,7 +21,7 @@ class Office extends Component {
     const role = localStorage.getItem("role");
 
     if (role === "employee") {
-      Router.push("#");
+      Router.push("/user");
     } else if (role === undefined) {
       Router.push("/login");
     }
@@ -89,18 +89,18 @@ class Office extends Component {
                 <tbody className="divide-y">
                   {officeData.map((office) => (
                     <tr key={office.id}>
-                      <th className="font-normal px-6 py-2">{office.id}</th>
-                      <th className="font-normal px-6 py-2">{office.name}</th>
-                      <th className="font-normal px-6 py-2">
+                      <td className="font-normal px-6 py-2">{office.id}</td>
+                      <td className="font-normal px-6 py-2">{office.name}</td>
+                      <td className="font-normal px-6 py-2">
                         {office.address}
-                      </th>
-                      <th className="font-normal px-6 py-2">
+                      </td>
+                      <td className="font-normal px-6 py-2">
                         {office.latitude}
-                      </th>
-                      <th className="font-normal px-6 py-2">
+                      </td>
+                      <td className="font-normal px-6 py-2">
                         {office.longitude}
-                      </th>
-                      <th className="font-normal px-6 py-2">
+                      </td>
+                      <td className="font-normal px-6 py-2">
                         <div className="inline-flex gap-4">
                           <Link href={`/admin/office/${office.id}`}>
                             <a className="cursor-pointer">
@@ -140,7 +140,7 @@ class Office extends Component {
                             </svg>
                           </a>
                         </div>
-                      </th>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

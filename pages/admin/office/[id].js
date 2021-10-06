@@ -33,7 +33,7 @@ class OfficeEdit extends Component {
     const role = localStorage.getItem("role");
 
     if (role === "employee") {
-      Router.push("#");
+      Router.push("/user");
     } else if (role === undefined) {
       Router.push("/login");
     }
@@ -95,6 +95,7 @@ class OfficeEdit extends Component {
       <>
         <Layout>
           <div className="self-center px-12">
+            <p className="mb-6 text-primary-blue">Edit Office Profile</p>
             <form
               className="border w-[400px] p-10 bg-gray-50 rounded shadow"
               onSubmit={this.handleSubmit}

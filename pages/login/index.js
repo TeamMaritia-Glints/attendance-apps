@@ -30,6 +30,8 @@ class Login extends Component {
       const decodedToken = jwtDecode(token);
       if (decodedToken.data.role === "admin") {
         Router.push("/admin");
+      } else if (decodedToken.data.role === "employee") {
+        Router.push("/user");
       }
     }
   }
@@ -69,7 +71,8 @@ class Login extends Component {
           const role = localStorage.getItem("role");
           if (role === "admin") {
             Router.push("/admin");
-          } else {
+          } else if (role === "employee") {
+            Router.push("/user");
           }
         }
       })

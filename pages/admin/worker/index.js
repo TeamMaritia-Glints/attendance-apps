@@ -1,24 +1,38 @@
 import { Component } from "react";
 import Link from "next/link";
-import Head from "next/head";
 import Layout from "../../../components/layout";
 import Cookies from "js-cookie";
 
 class User extends Component {
   constructor(props) {
     super(props);
-    this.state = { userData: [] };
+    this.state = {
+      userData: [],
+      authToken: Cookies.get("token")
+        ? Cookies.get("token")
+        : Cookies.get("refreshToken")
+        ? Cookies.get("refreshToken")
+        : undefined,
+    };
     this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   async componentDidMount() {
+    const role = localStorage.getItem("role");
+
+    if (role === "employee") {
+      Router.push("/user");
+    } else if (role === undefined) {
+      Router.push("/login");
+    }
+
     const res = await fetch(
       "https://attendance-employee.herokuapp.com/user?status=1&active=1",
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: Cookies.get("token"),
+          Authorization: this.state.authToken,
         },
       }
     );
@@ -27,8 +41,6 @@ class User extends Component {
   }
 
   handleUpdate(e, type) {
-    console.log(e);
-    console.log(type);
     let payload = {};
     if (type === "delete") {
       payload = {
@@ -40,7 +52,7 @@ class User extends Component {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: Cookies.get("token"),
+        Authorization: this.state.authToken,
       },
       body: JSON.stringify(payload),
     }).then(() => {
@@ -53,52 +65,39 @@ class User extends Component {
 
     return (
       <>
-        <Head>
-          <title>User List</title>
-          <meta name="keywords" content="userList" />
-        </Head>
-        <Layout></Layout>
-        <div className="sm:bg-wave bg-no-repeat bg-bottom">
-          <div className="flex h-screen">
-            <div className="w-full mx-auto">
-              <div className="text-right">
-                <Link href="../../admin/user/userAcc">
-                  <button
-                    className="bg-yellow-500 text-white active:bg-blue-600 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                    type="button"
-                  >
-                    User Request
-                  </button>
-                </Link>
-              </div>
-              <div className="border">
-                <table className="justify-center items-center w-full bg-transparent border-collapse">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="font-normal px-6 py-2">ID</th>
-                      <th className="font-normal px-6 py-2">Name</th>
-                      <th className="font-normal px-6 py-2">Role</th>
-                      <th className="font-normal px-6 py-2">Email</th>
-                      <th className="font-normal px-6 py-2">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {userData.map((x) => (
-                      <tr key={x.id}>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left font-bold">
-                          {x.id}
-                        </th>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left font-bold">
-                          {x.name}
-                        </th>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left font-bold">
-                          {x.role}
-                        </th>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left font-bold">
-                          {x.email}
-                        </th>
+        <Layout>
+          <div className="px-12">
+            <div className="text-right">
+              <Link href="/admin/worker/user-approval">
+                <button
+                  className="bg-yellow-500 mb-4 text-white text-xs px-4 py-2 rounded outline-none"
+                  type="button"
+                >
+                  User Request
+                </button>
+              </Link>
+            </div>
+            <div className="overflow-auto border">
+              <table className="min-w-full divide-y">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="font-normal px-6 py-2">ID</th>
+                    <th className="font-normal px-6 py-2">Name</th>
+                    <th className="font-normal px-6 py-2">Role</th>
+                    <th className="font-normal px-6 py-2">Email</th>
+                    <th className="font-normal px-6 py-2">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userData.map((user) => (
+                    <tr key={user.id}>
+                      <td className="font-normal px-6 py-2">{user.id}</td>
+                      <td className="font-normal px-6 py-2">{user.name}</td>
+                      <td className="font-normal px-6 py-2">{user.role}</td>
+                      <td className="font-normal px-6 py-2">{user.email}</td>
+                      <td className="font-normal px-6 py-2">
                         <div className="inline-flex gap-4">
-                          <Link href={`/admin/user/${x.id}`}>
+                          <Link href={`/admin/worker/${user.id}`}>
                             <a className="cursor-pointer">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +117,7 @@ class User extends Component {
                           </Link>
                           <a
                             className="cursor-pointer"
-                            onClick={() => this.handleUpdate(x, "delete")}
+                            onClick={() => this.handleUpdate(user, "delete")}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -136,14 +135,14 @@ class User extends Component {
                             </svg>
                           </a>
                         </div>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
+        </Layout>
       </>
     );
   }
