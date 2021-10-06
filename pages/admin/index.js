@@ -20,7 +20,7 @@ class Admin extends Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const role = localStorage.getItem("role");
 
     if (this.state.authToken === undefined) {
@@ -35,7 +35,7 @@ class Admin extends Component {
       }
     }
 
-    const res = await fetch(
+    fetch(
       "https://attendance-employee.herokuapp.com/attendance/employee-absence-report",
       {
         method: "GET",
@@ -44,9 +44,14 @@ class Admin extends Component {
           Authorization: this.state.authToken,
         },
       }
-    );
-    const data = await res.json();
-    this.setState({ attendanceData: data.data });
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        this.setState({ attendanceData: data.data });
+      });
+
     this.interval = setInterval(() => this.setState({ date: Date() }), 1000);
   }
 

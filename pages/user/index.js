@@ -24,6 +24,7 @@ class User extends Component {
     };
     this.handleCheckin = this.handleCheckin.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
+    this.logOut = this.logOut.bind(this);
   }
 
   componentDidMount() {
@@ -159,6 +160,10 @@ class User extends Component {
       Cookies.remove("refreshToken");
       localStorage.removeItem("name");
       localStorage.removeItem("role");
+      swal({
+        text: "Logout Successful!",
+        icon: "success",
+      });
       Router.push("/");
     });
   }

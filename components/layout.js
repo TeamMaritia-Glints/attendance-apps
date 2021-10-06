@@ -25,6 +25,10 @@ const Layout = ({ children }) => {
       Cookies.remove("refreshToken");
       localStorage.removeItem("name");
       localStorage.removeItem("role");
+      swal({
+        text: "Logout Successful!",
+        icon: "success",
+      });
       Router.push("/");
     });
   };
