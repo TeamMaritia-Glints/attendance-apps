@@ -1,8 +1,10 @@
 import { Component } from "react";
 import Link from "next/link";
+import Router from "next/router";
 import Layout from "../../components/layout";
 import Cookies from "js-cookie";
 import { data } from "autoprefixer";
+import swal from "sweetalert";
 
 class Admin extends Component {
   constructor(props) {
@@ -21,16 +23,16 @@ class Admin extends Component {
   async componentDidMount() {
     const role = localStorage.getItem("role");
 
-    if (role === "employee") {
-      Router.push("/user");
-    } else if (role === undefined) {
-      Router.push("/login");
-    }
-
     if (this.state.authToken === undefined) {
       localStorage.removeItem("name");
       localStorage.removeItem("role");
       Router.push("/login");
+    } else {
+      if (role === "employee") {
+        Router.push("/user");
+      } else if (role === undefined) {
+        Router.push("/login");
+      }
     }
 
     const res = await fetch(

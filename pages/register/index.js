@@ -5,6 +5,7 @@ import Link from "next/link";
 import Router from "next/router";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
+import swal from "sweetalert";
 
 class Register extends Component {
   constructor(props) {
@@ -16,7 +17,6 @@ class Register extends Component {
       password: "",
       confirmPassword: "",
       isSame: false,
-      error: null,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -66,13 +66,24 @@ class Register extends Component {
       })
       .then((data) => {
         if (data.status === "error") {
-          throw Error(data.message);
+          if (typeof data.message === "object") {
+            throw Error(data.message[0].message);
+          } else {
+            throw Error(data.message);
+          }
         } else {
+          swal({
+            text: data.message,
+            icon: "success",
+          });
           Router.push("/login");
         }
       })
       .catch((err) => {
-        this.setState({ error: err.message });
+        swal({
+          text: err.message,
+          icon: "warning",
+        });
       });
   };
 
@@ -111,6 +122,7 @@ class Register extends Component {
                       className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
                       type="text"
                       placeholder="First Name"
+                      pattern="^[A-Za-z]+$"
                       required
                       value={this.state.firstName}
                       onChange={(event) =>
@@ -121,6 +133,7 @@ class Register extends Component {
                       className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
                       type="text"
                       placeholder="Last Name"
+                      pattern="^[A-Za-z]+$"
                       value={this.state.lastName}
                       onChange={(event) => this.handleChange(event, "lastName")}
                     />
@@ -169,9 +182,6 @@ class Register extends Component {
                     <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue cursor-not-allowed">
                       Sign Up
                     </button>
-                  )}
-                  {this.state.error !== null && (
-                    <p className="mt-4 text-[red] w-72">{this.state.error}</p>
                   )}
                 </form>
                 <p className="mt-2 text-primary-blue">
