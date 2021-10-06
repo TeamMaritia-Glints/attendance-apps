@@ -1,20 +1,20 @@
 import { Component } from "react";
 import Link from "next/link";
-import Router from "next/router";
 import Layout from "../../../components/layout";
 import Cookies from "js-cookie";
 
-class Office extends Component {
+class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      officeData: [],
+      userData: [],
       authToken: Cookies.get("token")
         ? Cookies.get("token")
         : Cookies.get("refreshToken")
         ? Cookies.get("refreshToken")
         : undefined,
     };
+    this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   async componentDidMount() {
@@ -26,14 +26,8 @@ class Office extends Component {
       Router.push("/login");
     }
 
-    if (this.state.authToken === undefined) {
-      localStorage.removeItem("name");
-      localStorage.removeItem("role");
-      Router.push("/login");
-    }
-
     const res = await fetch(
-      "https://attendance-employee.herokuapp.com/office?status=1",
+      "https://attendance-employee.herokuapp.com/user?status=1&active=1",
       {
         method: "GET",
         headers: {
@@ -43,34 +37,43 @@ class Office extends Component {
       }
     );
     const data = await res.json();
-    this.setState({ officeData: data.data });
+    this.setState({ userData: data.data });
   }
 
-  handleDelete(id) {
-    fetch(`https://attendance-employee.herokuapp.com/office/${id}`, {
-      method: "DELETE",
+  handleUpdate(e, type) {
+    let payload = {};
+    if (type === "delete") {
+      payload = {
+        active: false,
+      };
+    }
+
+    fetch(`https://attendance-employee.herokuapp.com/user/${e.id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: this.state.authToken,
       },
+      body: JSON.stringify(payload),
     }).then(() => {
       this.componentDidMount();
     });
   }
 
   render() {
-    const { officeData } = this.state;
+    const { userData } = this.state;
+
     return (
       <>
         <Layout>
           <div className="px-12">
             <div className="text-right">
-              <Link href="/admin/office/add-office">
+              <Link href="/admin/worker/user-approval">
                 <button
-                  className="bg-primary-green mb-4 text-white text-xs px-4 py-2 rounded outline-none"
+                  className="bg-yellow-500 mb-4 text-white text-xs px-4 py-2 rounded outline-none"
                   type="button"
                 >
-                  Add Office
+                  User Request
                 </button>
               </Link>
             </div>
@@ -80,29 +83,21 @@ class Office extends Component {
                   <tr>
                     <th className="font-normal px-6 py-2">ID</th>
                     <th className="font-normal px-6 py-2">Name</th>
-                    <th className="font-normal px-6 py-2">Address</th>
-                    <th className="font-normal px-6 py-2">Latitude</th>
-                    <th className="font-normal px-6 py-2">Longitude</th>
+                    <th className="font-normal px-6 py-2">Role</th>
+                    <th className="font-normal px-6 py-2">Email</th>
                     <th className="font-normal px-6 py-2">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y">
-                  {officeData.map((office) => (
-                    <tr key={office.id}>
-                      <td className="font-normal px-6 py-2">{office.id}</td>
-                      <td className="font-normal px-6 py-2">{office.name}</td>
-                      <td className="font-normal px-6 py-2">
-                        {office.address}
-                      </td>
-                      <td className="font-normal px-6 py-2">
-                        {office.latitude}
-                      </td>
-                      <td className="font-normal px-6 py-2">
-                        {office.longitude}
-                      </td>
+                <tbody>
+                  {userData.map((user) => (
+                    <tr key={user.id}>
+                      <td className="font-normal px-6 py-2">{user.id}</td>
+                      <td className="font-normal px-6 py-2">{user.name}</td>
+                      <td className="font-normal px-6 py-2">{user.role}</td>
+                      <td className="font-normal px-6 py-2">{user.email}</td>
                       <td className="font-normal px-6 py-2">
                         <div className="inline-flex gap-4">
-                          <Link href={`/admin/office/${office.id}`}>
+                          <Link href={`/admin/worker/${user.id}`}>
                             <a className="cursor-pointer">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -122,7 +117,7 @@ class Office extends Component {
                           </Link>
                           <a
                             className="cursor-pointer"
-                            onClick={this.handleDelete.bind(this, office.id)}
+                            onClick={() => this.handleUpdate(user, "delete")}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -153,4 +148,4 @@ class Office extends Component {
   }
 }
 
-export default Office;
+export default User;

@@ -13,6 +13,11 @@ class OfficeEdit extends Component {
       latitude: "",
       longitude: "",
       id: "",
+      authToken: Cookies.get("token")
+        ? Cookies.get("token")
+        : Cookies.get("refreshToken")
+        ? Cookies.get("refreshToken")
+        : undefined,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,6 +30,20 @@ class OfficeEdit extends Component {
   }
 
   async componentDidMount() {
+    const role = localStorage.getItem("role");
+
+    if (role === "employee") {
+      Router.push("/user");
+    } else if (role === undefined) {
+      Router.push("/login");
+    }
+
+    if (this.state.authToken === undefined) {
+      localStorage.removeItem("name");
+      localStorage.removeItem("role");
+      Router.push("/login");
+    }
+
     const url = typeof window !== "undefined" && window.location.href;
     const urlId = url.substr(url.lastIndexOf("/") + 1);
 
@@ -34,7 +53,7 @@ class OfficeEdit extends Component {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: Cookies.get("token"),
+          Authorization: this.state.authToken,
         },
       }
     );
@@ -51,7 +70,7 @@ class OfficeEdit extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const edit = {
+    const editData = {
       name: this.state.name,
       address: this.state.address,
       latitude: this.state.latitude,
@@ -63,9 +82,9 @@ class OfficeEdit extends Component {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: Cookies.get("token"),
+        Authorization: this.state.authToken,
       },
-      body: JSON.stringify(edit),
+      body: JSON.stringify(editData),
     }).then(() => {
       Router.push("/admin/office");
     });
@@ -74,76 +93,64 @@ class OfficeEdit extends Component {
   render() {
     return (
       <>
-        <Layout></Layout>
-        <div className="flex h-screen">
-          <div className="m-auto">
-            <div className="container flex justify-center mx-auto max-h-[90%] max-w-[90%] my-12">
-              <div className="flex flex-col">
-                <div className="w-full">
-                  <form
-                    className="border w-[400px] p-10 bg-gray-50 rounded shadow"
-                    onSubmit={this.handleSubmit}
-                  >
-                    <div className="mb-[15px]">
-                      <input
-                        className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        value={this.state.name}
-                        onChange={(event) => this.handleChange(event, "name")}
-                      />
-                    </div>
-                    <div className="mb-[15px]">
-                      <input
-                        className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                        type="text"
-                        placeholder="Address"
-                        required
-                        value={this.state.address}
-                        onChange={(event) =>
-                          this.handleChange(event, "address")
-                        }
-                      />
-                    </div>
-                    <div className="mb-[15px]">
-                      <input
-                        className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                        type="text"
-                        placeholder="Latitude"
-                        required
-                        value={this.state.latitude}
-                        onChange={(event) =>
-                          this.handleChange(event, "latitude")
-                        }
-                      />
-                    </div>
-                    <div className="mb-[15px]">
-                      <input
-                        className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                        type="text"
-                        placeholder="Longitude"
-                        required
-                        value={this.state.longitude}
-                        onChange={(event) =>
-                          this.handleChange(event, "longitude")
-                        }
-                      />
-                    </div>
-                    <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
-                      Edit
-                    </button>
-                    <Link href="/admin/office">
-                      <a className="flex w-full h-[40px] mt-2 justify-center items-center rounded-md shadow-md bg-primary-green text-primary-blue">
-                        Cancel
-                      </a>
-                    </Link>
-                  </form>
-                </div>
+        <Layout>
+          <div className="self-center px-12">
+            <p className="mb-6 text-primary-blue">Edit Office Profile</p>
+            <form
+              className="border w-[400px] p-10 bg-gray-50 rounded shadow"
+              onSubmit={this.handleSubmit}
+            >
+              <div className="mb-[15px]">
+                <input
+                  className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                  type="text"
+                  placeholder="Name"
+                  required
+                  value={this.state.name}
+                  onChange={(event) => this.handleChange(event, "name")}
+                />
               </div>
-            </div>
+              <div className="mb-[15px]">
+                <input
+                  className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                  type="text"
+                  placeholder="Address"
+                  required
+                  value={this.state.address}
+                  onChange={(event) => this.handleChange(event, "address")}
+                />
+              </div>
+              <div className="mb-[15px]">
+                <input
+                  className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                  type="text"
+                  placeholder="Latitude"
+                  required
+                  value={this.state.latitude}
+                  onChange={(event) => this.handleChange(event, "latitude")}
+                />
+              </div>
+              <div className="mb-[15px]">
+                <input
+                  className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                  type="text"
+                  placeholder="Longitude"
+                  required
+                  value={this.state.longitude}
+                  onChange={(event) => this.handleChange(event, "longitude")}
+                />
+              </div>
+              <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue">
+                Edit
+              </button>
+              <Link href="/admin/office">
+                <a className="flex w-full h-[40px] mt-2 justify-center items-center rounded-md shadow-md bg-primary-green text-primary-blue">
+                  Cancel
+                </a>
+              </Link>
+            </form>
           </div>
-        </div>
+        </Layout>
       </>
     );
   }
