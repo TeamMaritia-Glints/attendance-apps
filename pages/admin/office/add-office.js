@@ -67,11 +67,25 @@ class AddOffice extends Component {
         return res.json();
       })
       .then((data) => {
+        if (data.status === "error") {
+          if (typeof data.message === "object") {
+            throw Error(data.message[0].message);
+          } else {
+            throw Error(data.message);
+          }
+        } else {
+          swal({
+            text: data.message,
+            icon: "success",
+          });
+          Router.push("/admin/office");
+        }
+      })
+      .catch((err) => {
         swal({
-          text: data.message,
-          icon: "success",
+          text: err.message,
+          icon: "warning",
         });
-        Router.push("/admin/office");
       });
   }
 

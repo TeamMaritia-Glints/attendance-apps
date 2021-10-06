@@ -1,6 +1,5 @@
 import { Component } from "react";
 import Link from "next/link";
-import Head from "next/head";
 import Router from "next/router";
 import Layout from "../../components/layout";
 import Cookies from "js-cookie";
@@ -19,7 +18,6 @@ class Admin extends Component {
         ? Cookies.get("refreshToken")
         : undefined,
     };
-    this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   componentDidMount() {
@@ -38,7 +36,7 @@ class Admin extends Component {
     }
 
     fetch(
-      "https://attendance-employee.herokuapp.com/attendance/employee-absence-report",
+      "https://attendance-employee.herokuapp.com/attendance/user-attendances?year=2021&month=10&day=01",
       {
         method: "GET",
         headers: {
@@ -61,35 +59,49 @@ class Admin extends Component {
     clearInterval(this.interval);
   }
 
-  handleUpdate(e, type) {
-    let payload = {};
-    if (type === "Declined") {
-      payload = {
-        status: "Declined",
-      };
-    } else if (type === "Approved") {
-      payload = {
-        status: "Approved",
-      };
-    }
-    let popUpConfirm = confirm(`Are you sure want to ${type}?`);
-    if (popUpConfirm === true) {
-      fetch(
-        `https://attendance-employee.herokuapp.com/attendance/update-attendance-status?${e.id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: Cookies.get("token"),
-          },
-          body: JSON.stringify(payload),
-        }
-      ).then(() => {
-        this.componentDidMount();
-      });
+  handleButton(id, type) {
+    const data = { id: id, status: "" };
+    let text = "";
+    let textSuccess = "";
+
+    if (type === "Approved") {
+      data.status = type;
+      text = "This worker will be approved!";
+      textSuccess = "Worker has been approved!";
     } else {
-      return true;
+      data.status = type;
+      text = "This worker will be declined!";
+      textSuccess = "Worker has been declined!";
     }
+
+    swal({
+      title: "Are you sure?",
+      text: text,
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        swal(textSuccess, {
+          icon: "success",
+        });
+        fetch(
+          `https://attendance-employee.herokuapp.com/attendance/update-attendance-status`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: this.state.authToken,
+            },
+            body: JSON.stringify(data),
+          }
+        ).then(() => {
+          this.componentDidMount();
+        });
+      } else {
+        swal("Action canceled!");
+      }
+    });
   }
 
   render() {
@@ -97,13 +109,8 @@ class Admin extends Component {
 
     return (
       <>
-        <Head>
-          <title>Attendance Worker</title>
-          <meta name="keywords" content="attendanceList" />
-        </Head>
-
         <Layout>
-          <div className="px-12">
+          <div className="px-12 pb-12">
             <div className="text-xl">{this.state.date}</div>
             <div className="text-right">
               <Link href="/admin/absence">
@@ -158,39 +165,38 @@ class Admin extends Component {
                         <div className="inline-flex gap-4">
                           <a
                             className="cursor-pointer"
-                            onClick={() =>
-                              this.handleUpdate(attendance, "Approved")
-                            }
+                            onClick={this.handleButton.bind(
+                              this,
+                              attendance.id,
+                              "Approved"
+                            )}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
+                              width="20"
+                              height="20"
+                              viewBox="0 0 20 20"
                               fill="green"
                             >
-                              <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z" />
+                              <path d="M10.219,1.688c-4.471,0-8.094,3.623-8.094,8.094s3.623,8.094,8.094,8.094s8.094-3.623,8.094-8.094S14.689,1.688,10.219,1.688 M10.219,17.022c-3.994,0-7.242-3.247-7.242-7.241c0-3.994,3.248-7.242,7.242-7.242c3.994,0,7.241,3.248,7.241,7.242C17.46,13.775,14.213,17.022,10.219,17.022 M15.099,7.03c-0.167-0.167-0.438-0.167-0.604,0.002L9.062,12.48l-2.269-2.277c-0.166-0.167-0.437-0.167-0.603,0c-0.166,0.166-0.168,0.437-0.002,0.603l2.573,2.578c0.079,0.08,0.188,0.125,0.3,0.125s0.222-0.045,0.303-0.125l5.736-5.751C15.268,7.466,15.265,7.196,15.099,7.03"></path>
                             </svg>
                           </a>
                           <a
                             className="cursor-pointer"
-                            onClick={() =>
-                              this.handleUpdate(attendance, "Declined")
-                            }
+                            onClick={this.handleButton.bind(
+                              this,
+                              attendance.id,
+                              "Declined"
+                            )}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="w-6 h-6 text-red-400"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
+                              width="20"
+                              height="20"
+                              viewBox="0 0 20 20"
+                              fill="red"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
+                              <path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path>
                             </svg>
                           </a>
                         </div>

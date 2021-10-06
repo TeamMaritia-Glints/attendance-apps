@@ -79,7 +79,7 @@ class Office extends Component {
     return (
       <>
         <Layout>
-          <div className="px-12">
+          <div className="px-12 pb-12">
             <div className="text-right">
               <Link href="/admin/office/add-office">
                 <button
