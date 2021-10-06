@@ -28,6 +28,7 @@ const Layout = ({ children }) => {
       Router.push("/");
     });
   };
+
   return (
     <>
       <Head>
