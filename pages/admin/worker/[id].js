@@ -3,14 +3,16 @@ import Router from "next/router";
 import Link from "next/link";
 import Layout from "../../../components/layout";
 import Cookies from "js-cookie";
+import swal from "sweetalert";
 
 class EditUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      email: "",
+      firstName: "",
+      lastName: "",
       role: "",
+      office_id: "",
       id: "",
       authToken: Cookies.get("token")
         ? Cookies.get("token")
@@ -31,10 +33,16 @@ class EditUser extends Component {
   async componentDidMount() {
     const role = localStorage.getItem("role");
 
-    if (role === "employee") {
-      Router.push("/user");
-    } else if (role === undefined) {
+    if (this.state.authToken === undefined) {
+      localStorage.removeItem("name");
+      localStorage.removeItem("role");
       Router.push("/login");
+    } else {
+      if (role === "employee") {
+        Router.push("/user");
+      } else if (role === undefined) {
+        Router.push("/login");
+      }
     }
 
     if (this.state.authToken === undefined) {
@@ -57,10 +65,13 @@ class EditUser extends Component {
       }
     );
     const data = await res.json();
+    const name = data.data.name.split(" ");
+
     this.setState({
-      name: data.data.name,
-      email: data.data.email,
+      firstName: name[0],
+      lastName: name ? name[1] : "",
       role: data.data.role,
+      office_id: data.data.Office ? data.data.Office.id : null,
       id: data.data.id,
     });
   }
@@ -68,10 +79,14 @@ class EditUser extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const edit = {
-      name: this.state.name,
-      email: this.state.email,
+    const fullName = this.state.lastName
+      ? `${this.state.firstName} ${this.state.lastName}`
+      : this.state.firstName;
+
+    const editData = {
+      name: fullName,
       role: this.state.role,
+      office_id: parseInt(this.state.office_id),
       status: true,
     };
 
@@ -81,10 +96,32 @@ class EditUser extends Component {
         "Content-Type": "application/json",
         Authorization: this.state.authToken,
       },
-      body: JSON.stringify(edit),
-    }).then(() => {
-      Router.push("/admin/worker");
-    });
+      body: JSON.stringify(editData),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.status === "error") {
+          if (typeof data.message === "object") {
+            throw Error(data.message[0].message);
+          } else {
+            throw Error(data.message);
+          }
+        } else {
+          swal({
+            text: data.message,
+            icon: "success",
+          });
+          Router.push("/admin/worker");
+        }
+      })
+      .catch((err) => {
+        swal({
+          text: err.message,
+          icon: "warning",
+        });
+      });
   }
 
   render() {
@@ -97,27 +134,26 @@ class EditUser extends Component {
               className="border w-[400px] p-10 bg-gray-50 rounded shadow"
               onSubmit={this.handleSubmit}
             >
-              <div className="mb-[15px]">
+              <div className="flex gap-4 mb-[15px]">
                 <input
                   className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
                   type="text"
-                  placeholder="Name"
+                  placeholder="First Name"
+                  pattern="^[A-Za-z]+$"
                   required
-                  value={this.state.name}
-                  onChange={(event) => this.handleChange(event, "name")}
+                  value={this.state.firstName}
+                  onChange={(event) => this.handleChange(event, "firstName")}
                 />
-              </div>
-              <div className="mb-[15px]">
                 <input
                   className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                  type="email"
-                  placeholder="Email"
-                  required
-                  value={this.state.email}
-                  onChange={(event) => this.handleChange(event, "email")}
+                  type="text"
+                  placeholder="Last Name"
+                  pattern="^[A-Za-z]+$"
+                  value={this.state.lastName ? this.state.lastName : ""}
+                  onChange={(event) => this.handleChange(event, "lastName")}
                 />
               </div>
-              <div className="dropdown">
+              <div className="dropdown mb-[15px]">
                 <select
                   className="p-2 rounded-md text-white bg-primary-blue"
                   value={this.state.role}
@@ -129,6 +165,16 @@ class EditUser extends Component {
                   </option>
                   <option value="employee">Employee</option>
                 </select>
+              </div>
+              <div>
+                <input
+                  className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
+                  type="text"
+                  placeholder="Office"
+                  required
+                  value={this.state.office_id ? this.state.office_id : ""}
+                  onChange={(event) => this.handleChange(event, "office_id")}
+                />
               </div>
               <button
                 type="submit"

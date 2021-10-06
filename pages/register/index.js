@@ -43,7 +43,7 @@ class Register extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    let fullName = this.state.lastName
+    const fullName = this.state.lastName
       ? `${this.state.firstName} ${this.state.lastName}`
       : this.state.firstName;
 

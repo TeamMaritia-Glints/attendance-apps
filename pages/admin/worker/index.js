@@ -4,7 +4,7 @@ import Router from "next/router";
 import Layout from "../../../components/layout";
 import Cookies from "js-cookie";
 
-class User extends Component {
+class Worker extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,16 +15,21 @@ class User extends Component {
         ? Cookies.get("refreshToken")
         : undefined,
     };
-    this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   async componentDidMount() {
     const role = localStorage.getItem("role");
 
-    if (role === "employee") {
-      Router.push("/user");
-    } else if (role === undefined) {
+    if (this.state.authToken === undefined) {
+      localStorage.removeItem("name");
+      localStorage.removeItem("role");
       Router.push("/login");
+    } else {
+      if (role === "employee") {
+        Router.push("/user");
+      } else if (role === undefined) {
+        Router.push("/login");
+      }
     }
 
     const res = await fetch(
@@ -41,23 +46,35 @@ class User extends Component {
     this.setState({ userData: data.data });
   }
 
-  handleUpdate(e, type) {
-    let payload = {};
-    if (type === "delete") {
-      payload = {
-        active: false,
-      };
-    }
+  handleDelete(id) {
+    const payload = {
+      active: false,
+    };
 
-    fetch(`https://attendance-employee.herokuapp.com/user/${e.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: this.state.authToken,
-      },
-      body: JSON.stringify(payload),
-    }).then(() => {
-      this.componentDidMount();
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this worker data!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        swal("Worker data has been deleted!", {
+          icon: "success",
+        });
+        fetch(`https://attendance-employee.herokuapp.com/user/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: this.state.authToken,
+          },
+          body: JSON.stringify(payload),
+        }).then(() => {
+          this.componentDidMount();
+        });
+      } else {
+        swal("Action canceled!");
+      }
     });
   }
 
@@ -67,7 +84,7 @@ class User extends Component {
     return (
       <>
         <Layout>
-          <div className="px-12">
+          <div className="px-12 pb-12">
             <div className="text-right">
               <Link href="/admin/worker/user-approval">
                 <button
@@ -86,6 +103,7 @@ class User extends Component {
                     <th className="font-normal px-6 py-2">Name</th>
                     <th className="font-normal px-6 py-2">Role</th>
                     <th className="font-normal px-6 py-2">Email</th>
+                    <th className="font-normal px-6 py-2">Office</th>
                     <th className="font-normal px-6 py-2">Action</th>
                   </tr>
                 </thead>
@@ -96,6 +114,10 @@ class User extends Component {
                       <td className="font-normal px-6 py-2">{user.name}</td>
                       <td className="font-normal px-6 py-2">{user.role}</td>
                       <td className="font-normal px-6 py-2">{user.email}</td>
+                      <td className="font-normal px-6 py-2">
+                        {user.Office ? user.Office.id : "No Office"}
+                      </td>
+
                       <td className="font-normal px-6 py-2">
                         <div className="inline-flex gap-4">
                           <Link href={`/admin/worker/${user.id}`}>
@@ -118,7 +140,7 @@ class User extends Component {
                           </Link>
                           <a
                             className="cursor-pointer"
-                            onClick={() => this.handleUpdate(user, "delete")}
+                            onClick={this.handleDelete.bind(this, user.id)}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -149,4 +171,4 @@ class User extends Component {
   }
 }
 
-export default User;
+export default Worker;
