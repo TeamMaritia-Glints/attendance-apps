@@ -10,12 +10,21 @@ class Absence extends Component {
     super(props);
     this.state = {
       absenceData: [],
+      dateSearch: new Date().toISOString().slice(0, 7),
       authToken: Cookies.get("token")
         ? Cookies.get("token")
         : Cookies.get("refreshToken")
         ? Cookies.get("refreshToken")
         : undefined,
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.search = this.search.bind(this);
+  }
+
+  handleChange(event, field) {
+    this.setState({
+      [field]: event.target.value,
+    });
   }
 
   async componentDidMount() {
@@ -33,8 +42,14 @@ class Absence extends Component {
       }
     }
 
+    const date = this.state.dateSearch.replaceAll("-", " ");
+    const dateArray = date.split(" ");
+
+    const month = dateArray[1];
+    const year = dateArray[0];
+
     const res = await fetch(
-      "https://attendance-employee.herokuapp.com/attendance/employee-absence-report?year=2021&month=10",
+      `https://attendance-employee.herokuapp.com/attendance/employee-absence-report?year=${year}&month=${month}`,
       {
         method: "GET",
         headers: {
@@ -47,6 +62,31 @@ class Absence extends Component {
     this.setState({ absenceData: data.data.absenceReport });
   }
 
+  search() {
+    const date = this.state.dateSearch.replaceAll("-", " ");
+    const dateArray = date.split(" ");
+
+    const month = dateArray[1];
+    const year = dateArray[0];
+
+    fetch(
+      `https://attendance-employee.herokuapp.com/attendance/employee-absence-report?year=${year}&month=${month}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.state.authToken,
+        },
+      }
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        this.setState({ absenceData: data.data.absenceReport });
+      });
+  }
+
   render() {
     const { absenceData } = this.state;
 
@@ -55,6 +95,21 @@ class Absence extends Component {
         <Layout>
           <div className="px-12 pb-12">
             <h1>Workers with more than 3 days absence in a month</h1>
+            <div className="mt-8 mb-2">
+              <input
+                className="border border-primary-blue border-b-2 rounded px-2"
+                type="month"
+                value={this.state.dateSearch}
+                onChange={(event) => this.handleChange(event, "dateSearch")}
+              />
+              <button
+                onClick={this.search}
+                className="bg-primary-blue text-white text-xs ml-4 px-4 py-2 rounded outline-none"
+                type="button"
+              >
+                Search
+              </button>
+            </div>
             <div className="overflow-auto border">
               <table className="min-w-full divide-y">
                 <thead className="bg-gray-50">

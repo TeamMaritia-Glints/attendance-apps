@@ -44,10 +44,12 @@ class Admin extends Component {
       }
     }
 
-    const dateNow = new Date();
-    const day = dateNow.getDate();
-    const month = dateNow.getMonth() + 1;
-    const year = dateNow.getFullYear();
+    const date = this.state.dateSearch.replaceAll("-", " ");
+    const dateArray = date.split(" ");
+
+    const day = dateArray[2];
+    const month = dateArray[1];
+    const year = dateArray[0];
 
     fetch(
       `https://attendance-employee.herokuapp.com/attendance/user-attendances?year=${year}&month=${month}&day=${day}`,
@@ -125,6 +127,7 @@ class Admin extends Component {
     const day = dateArray[2];
     const month = dateArray[1];
     const year = dateArray[0];
+
     fetch(
       `https://attendance-employee.herokuapp.com/attendance/user-attendances?year=${year}&month=${month}&day=${day}`,
       {
