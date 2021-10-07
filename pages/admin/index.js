@@ -12,12 +12,21 @@ class Admin extends Component {
       userData: [],
       attendanceData: [],
       date: null,
+      dateSearch: new Date().toISOString().slice(0, 10),
       authToken: Cookies.get("token")
         ? Cookies.get("token")
         : Cookies.get("refreshToken")
         ? Cookies.get("refreshToken")
         : undefined,
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.search = this.search.bind(this);
+  }
+
+  handleChange(event, field) {
+    this.setState({
+      [field]: event.target.value,
+    });
   }
 
   componentDidMount() {
@@ -35,8 +44,13 @@ class Admin extends Component {
       }
     }
 
+    const dateNow = new Date();
+    const day = dateNow.getDate();
+    const month = dateNow.getMonth() + 1;
+    const year = dateNow.getFullYear();
+
     fetch(
-      "https://attendance-employee.herokuapp.com/attendance/user-attendances?year=2021&month=10&day=01",
+      `https://attendance-employee.herokuapp.com/attendance/user-attendances?year=${year}&month=${month}&day=${day}`,
       {
         method: "GET",
         headers: {
@@ -104,6 +118,31 @@ class Admin extends Component {
     });
   }
 
+  search() {
+    const date = this.state.dateSearch.replaceAll("-", " ");
+    const dateArray = date.split(" ");
+
+    const day = dateArray[2];
+    const month = dateArray[1];
+    const year = dateArray[0];
+    fetch(
+      `https://attendance-employee.herokuapp.com/attendance/user-attendances?year=${year}&month=${month}&day=${day}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.state.authToken,
+        },
+      }
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        this.setState({ attendanceData: data.data });
+      });
+  }
+
   render() {
     const { attendanceData } = this.state;
 
@@ -112,15 +151,32 @@ class Admin extends Component {
         <Layout>
           <div className="px-12 pb-12">
             <div className="text-xl">{this.state.date}</div>
-            <div className="text-right">
-              <Link href="/admin/absence">
+            <div className="flex mt-8 mb-2 justify-between gap-10">
+              <div>
+                <input
+                  className="border border-primary-blue border-b-2 rounded px-2"
+                  type="date"
+                  value={this.state.dateSearch}
+                  onChange={(event) => this.handleChange(event, "dateSearch")}
+                />
                 <button
-                  className="bg-[#F87171] mb-4 text-white text-xs px-4 py-2 rounded outline-none"
+                  onClick={this.search}
+                  className="bg-primary-blue text-white text-xs ml-4 px-4 py-2 rounded outline-none"
                   type="button"
                 >
-                  Absence
+                  Search
                 </button>
-              </Link>
+              </div>
+              <div>
+                <Link href="/admin/absence">
+                  <button
+                    className="bg-[#F87171] mb-4 text-white text-xs px-4 py-2 rounded outline-none"
+                    type="button"
+                  >
+                    Absence List
+                  </button>
+                </Link>
+              </div>
             </div>
             <div className="overflow-auto border">
               <table className="min-w-full divide-y">
