@@ -14,6 +14,7 @@ class EditUser extends Component {
       role: "",
       office_id: "",
       id: "",
+      officeData: [],
       authToken: Cookies.get("token")
         ? Cookies.get("token")
         : Cookies.get("refreshToken")
@@ -51,10 +52,11 @@ class EditUser extends Component {
       Router.push("/login");
     }
 
+    // Get User by ID
     const url = typeof window !== "undefined" && window.location.href;
     const urlId = url.substr(url.lastIndexOf("/") + 1);
 
-    const res = await fetch(
+    const resUser = await fetch(
       `https://attendance-employee.herokuapp.com/user/${urlId}`,
       {
         method: "GET",
@@ -64,15 +66,32 @@ class EditUser extends Component {
         },
       }
     );
-    const data = await res.json();
-    const name = data.data.name.split(" ");
+    const dataUser = await resUser.json();
+
+    // Get User's Office
+    const resOffice = await fetch(
+      "https://attendance-employee.herokuapp.com/office?status=1",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.state.authToken,
+        },
+      }
+    );
+    const dataOffice = await resOffice.json();
+
+    const name = dataUser.data.name.split(" ");
 
     this.setState({
       firstName: name[0],
       lastName: name ? name[1] : "",
-      role: data.data.role,
-      office_id: data.data.Office ? data.data.Office.id : null,
-      id: data.data.id,
+      role: dataUser.data.role,
+      office_id: dataUser.data.Office
+        ? dataUser.data.Office.id
+        : dataOffice.data[0].id,
+      id: dataUser.data.id,
+      officeData: dataOffice.data,
     });
   }
 
@@ -125,6 +144,8 @@ class EditUser extends Component {
   }
 
   render() {
+    const { officeData } = this.state;
+
     return (
       <>
         <Layout>
@@ -160,21 +181,23 @@ class EditUser extends Component {
                   required
                   onChange={(event) => this.handleChange(event, "role")}
                 >
-                  <option value="admin" type="select">
-                    Admin
-                  </option>
+                  <option value="admin">Admin</option>
                   <option value="employee">Employee</option>
                 </select>
               </div>
-              <div>
-                <input
-                  className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                  type="text"
-                  placeholder="Office"
-                  required
+              <div className="dropdown mb-[15px]">
+                <select
+                  className="p-2 rounded-md text-white bg-primary-blue"
                   value={this.state.office_id ? this.state.office_id : ""}
+                  required
                   onChange={(event) => this.handleChange(event, "office_id")}
-                />
+                >
+                  {officeData.map((office) => (
+                    <option key={office.id} value={office.id}>
+                      {office.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <button
                 type="submit"

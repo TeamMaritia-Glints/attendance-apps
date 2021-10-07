@@ -115,7 +115,7 @@ class Worker extends Component {
                       <td className="font-normal px-6 py-2">{user.role}</td>
                       <td className="font-normal px-6 py-2">{user.email}</td>
                       <td className="font-normal px-6 py-2">
-                        {user.Office ? user.Office.id : "No Office"}
+                        {user.Office ? user.Office.name : "No Office"}
                       </td>
 
                       <td className="font-normal px-6 py-2">
