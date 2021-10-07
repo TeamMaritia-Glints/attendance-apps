@@ -10,6 +10,7 @@ class Absence extends Component {
     super(props);
     this.state = {
       absenceData: [],
+      dateNow: new Date().toISOString().slice(0, 7),
       dateSearch: new Date().toISOString().slice(0, 7),
       authToken: Cookies.get("token")
         ? Cookies.get("token")
@@ -99,6 +100,7 @@ class Absence extends Component {
               <input
                 className="border border-primary-blue border-b-2 rounded px-2"
                 type="month"
+                max={this.state.dateNow}
                 value={this.state.dateSearch}
                 onChange={(event) => this.handleChange(event, "dateSearch")}
               />

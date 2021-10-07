@@ -12,6 +12,7 @@ class Admin extends Component {
       userData: [],
       attendanceData: [],
       date: null,
+      dateNow: new Date().toISOString().slice(0, 10),
       dateSearch: new Date().toISOString().slice(0, 10),
       authToken: Cookies.get("token")
         ? Cookies.get("token")
@@ -159,6 +160,7 @@ class Admin extends Component {
                 <input
                   className="border border-primary-blue border-b-2 rounded px-2"
                   type="date"
+                  max={this.state.dateNow}
                   value={this.state.dateSearch}
                   onChange={(event) => this.handleChange(event, "dateSearch")}
                 />
