@@ -74,6 +74,7 @@ class ResetPassword extends Component {
             text: data.message,
             icon: "success",
           });
+          Router.push("/login");
         }
       })
       .catch((err) => {

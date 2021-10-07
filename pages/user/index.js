@@ -66,13 +66,7 @@ class User extends Component {
         latitude: this.state.lat,
       },
     };
-    // const payload = {
-    //   checkInTime: new Date(),
-    //   checkInLocation: {
-    //     longitude: 106.7973372624521,
-    //     latitude: -6.271461420612064,
-    //   },
-    // };
+    
     fetch("https://attendance-employee.herokuapp.com/attendance/check-in", {
       method: "POST",
       headers: {
@@ -110,13 +104,7 @@ class User extends Component {
         latitude: this.state.lat,
       },
     };
-    // const payload = {
-    //   checkOutTime: new Date(),
-    //   checkOutLocation: {
-    //     longitude: 106.7973372624521,
-    //     latitude: -6.271461420612064,
-    //   },
-    // };
+
     fetch("https://attendance-employee.herokuapp.com/attendance/check-out", {
       method: "POST",
       headers: {
