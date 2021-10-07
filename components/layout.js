@@ -3,6 +3,7 @@ import Router from "next/router";
 import Head from "next/head";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import swal from "sweetalert";
 
 const Layout = ({ children }) => {
   const [showMe, setShowMe] = useState(false);
