@@ -11,7 +11,6 @@ class Admin extends Component {
     this.state = {
       userData: [],
       attendanceData: [],
-      date: null,
       dateNow: new Date().toISOString().slice(0, 10),
       dateSearch: new Date().toISOString().slice(0, 10),
       authToken: Cookies.get("token")
@@ -68,12 +67,6 @@ class Admin extends Component {
       .then((data) => {
         this.setState({ attendanceData: data.data });
       });
-
-    this.interval = setInterval(() => this.setState({ date: Date() }), 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
   }
 
   handleButton(id, type) {
@@ -154,7 +147,6 @@ class Admin extends Component {
       <>
         <Layout>
           <div className="px-12 pb-12">
-            <div className="text-xl">{this.state.date}</div>
             <div className="flex mt-8 mb-2 justify-between gap-10">
               <div>
                 <input
