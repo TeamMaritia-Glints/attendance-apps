@@ -199,13 +199,13 @@ class Admin extends Component {
                       </th>
                       <th className="font-normal px-6 py-2">
                         {attendance.checkInTime
-                          .replace("T", " / ")
-                          .replace(".000Z", "")}
+//                           .replace("T", " / ")
+//                           .replace(".000Z", "")}
                       </th>
                       <th className="font-normal px-6 py-2">
                         {attendance.checkOutTime
-                          .replace("T", " / ")
-                          .replace(".000Z", "")}
+//                           .replace("T", " / ")
+//                           .replace(".000Z", "")}
                       </th>
                       <th className="font-normal px-6 py-2">
                         {attendance.workingHourView}
