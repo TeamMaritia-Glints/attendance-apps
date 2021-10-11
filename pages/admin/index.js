@@ -202,14 +202,14 @@ class Admin extends Component {
                           attendance.checkInTimeUTC
                             .replace("T", " / ")
                             .replace(".000Z", "") :
-                          ""}
+                          "-"}
                       </th>
                       <th className="font-normal px-6 py-2">
                         {attendance.checkOutTimeUTC ?
                           attendance.checkOutTimeUTC
                             .replace("T", " / ")
                             .replace(".000Z", "") :
-                          ""}
+                          "-"}
                       </th>
                       <th className="font-normal px-6 py-2">
                         {attendance.workingHourView}
