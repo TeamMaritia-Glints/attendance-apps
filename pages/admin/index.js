@@ -147,8 +147,8 @@ class Admin extends Component {
       <>
         <Layout>
           <div className="px-12 pb-12">
-            <div className="flex mt-8 mb-2 justify-between gap-10">
-              <div>
+            <div className="sm:flex-wrap md:flex mt-8 mb-2 justify-between">
+              <div className="min-w-max">
                 <input
                   className="border border-primary-blue border-b-2 rounded px-2"
                   type="date"
@@ -157,8 +157,8 @@ class Admin extends Component {
                   onChange={(event) => this.handleChange(event, "dateSearch")}
                 />
                 <button
-                  onClick={this.search}
                   className="bg-primary-blue text-white text-xs ml-4 px-4 py-2 rounded outline-none"
+                  onClick={this.search}
                   type="button"
                 >
                   Search
@@ -198,18 +198,18 @@ class Admin extends Component {
                         {attendance.User.role}
                       </th>
                       <th className="font-normal px-6 py-2">
-                        {attendance.checkInTimeUTC ?
-                          attendance.checkInTimeUTC
-                            .replace("T", " / ")
-                            .replace(".000Z", "") :
-                          "-"}
+                        {attendance.checkInTimeUTC
+                          ? attendance.checkInTimeUTC
+                              .replace("T", " / ")
+                              .replace(".000Z", "")
+                          : "-"}
                       </th>
                       <th className="font-normal px-6 py-2">
-                        {attendance.checkOutTimeUTC ?
-                          attendance.checkOutTimeUTC
-                            .replace("T", " / ")
-                            .replace(".000Z", "") :
-                          "-"}
+                        {attendance.checkOutTimeUTC
+                          ? attendance.checkOutTimeUTC
+                              .replace("T", " / ")
+                              .replace(".000Z", "")
+                          : "-"}
                       </th>
                       <th className="font-normal px-6 py-2">
                         {attendance.workingHourView}
