@@ -66,8 +66,8 @@ class User extends Component {
         latitude: this.state.lat,
       },
     };
-    
-    fetch("https://attendance-employee.herokuapp.com/attendance/check-in", {
+
+    fetch("http://localhost:3307/attendance/check-in", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -105,7 +105,7 @@ class User extends Component {
       },
     };
 
-    fetch("https://attendance-employee.herokuapp.com/attendance/check-out", {
+    fetch("http://localhost:3307/attendance/check-out", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -137,7 +137,7 @@ class User extends Component {
   logOut(e) {
     e.preventDefault();
 
-    fetch("https://attendance-employee.herokuapp.com/auth/logout", {
+    fetch("http://localhost:3307/auth/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

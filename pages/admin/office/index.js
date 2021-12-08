@@ -33,16 +33,13 @@ class Office extends Component {
       }
     }
 
-    const res = await fetch(
-      "https://attendance-employee.herokuapp.com/office?status=1",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.state.authToken,
-        },
-      }
-    );
+    const res = await fetch("http://localhost:3307/office?status=1", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: this.state.authToken,
+      },
+    });
     const data = await res.json();
     this.setState({ officeData: data.data });
   }
@@ -59,7 +56,7 @@ class Office extends Component {
         swal("Office data has been deleted!", {
           icon: "success",
         });
-        fetch(`https://attendance-employee.herokuapp.com/office/${id}`, {
+        fetch(`http://localhost:3307/office/${id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

@@ -50,7 +50,7 @@ class Absence extends Component {
     const year = dateArray[0];
 
     const res = await fetch(
-      `https://attendance-employee.herokuapp.com/attendance/employee-absence-report?year=${year}&month=${month}`,
+      `http://localhost:3307/attendance/employee-absence-report?year=${year}&month=${month}`,
       {
         method: "GET",
         headers: {
@@ -64,7 +64,7 @@ class Absence extends Component {
   }
 
   search() {
-    console.log('Just for testing')
+    console.log("Just for testing");
     const date = this.state.dateSearch.replaceAll("-", " ");
     const dateArray = date.split(" ");
 
@@ -72,7 +72,7 @@ class Absence extends Component {
     const year = dateArray[0];
 
     fetch(
-      `https://attendance-employee.herokuapp.com/attendance/employee-absence-report?year=${year}&month=${month}`,
+      `http://localhost:3307/attendance/employee-absence-report?year=${year}&month=${month}`,
       {
         method: "GET",
         headers: {

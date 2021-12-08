@@ -48,16 +48,13 @@ class OfficeEdit extends Component {
     const url = typeof window !== "undefined" && window.location.href;
     const urlId = url.substr(url.lastIndexOf("/") + 1);
 
-    const res = await fetch(
-      `https://attendance-employee.herokuapp.com/office/${urlId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.state.authToken,
-        },
-      }
-    );
+    const res = await fetch(`http://localhost:3307/office/${urlId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: this.state.authToken,
+      },
+    });
     const data = await res.json();
     this.setState({
       name: data.data.name,
@@ -79,7 +76,7 @@ class OfficeEdit extends Component {
       status: true,
     };
 
-    fetch(`https://attendance-employee.herokuapp.com/office/${this.state.id}`, {
+    fetch(`http://localhost:3307/office/${this.state.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

@@ -56,7 +56,7 @@ class Register extends Component {
       status: false,
     };
 
-    fetch("https://attendance-employee.herokuapp.com/auth/register", {
+    fetch("http://localhost:3307/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(signUpData),

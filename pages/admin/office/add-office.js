@@ -55,7 +55,7 @@ class AddOffice extends Component {
       longitude: this.state.longitude,
     };
 
-    fetch("https://attendance-employee.herokuapp.com/office", {
+    fetch("http://localhost:3307/office", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
