@@ -42,6 +42,7 @@ const Layout = ({ children }) => {
       </Head>
 
       <div className="flex">
+        {/* Desktop */}
         <aside className="relative bg-primary-blue h-screen w-64 hidden sm:block shadow-xl">
           <nav className="text-white text-base font-normal pt-3">
             <Link href="/admin">
@@ -73,7 +74,6 @@ const Layout = ({ children }) => {
         </aside>
 
         <div className="w-full flex flex-col h-screen overflow-y-hidden">
-          {/* Desktop */}
           <header className="w-full items-center bg-white py-2 px-6 hidden sm:flex">
             <div className="w-1/2"></div>
             <div className="relative w-1/2 flex justify-end">

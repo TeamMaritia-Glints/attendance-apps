@@ -95,7 +95,7 @@ class ResetPassword extends Component {
       <>
         <Head>
           <title>Attendance App - Reset Password</title>
-          <meta name="keywords" content="reset-password" />
+          <meta name="Reset Password" content="reset-password" />
         </Head>
 
         <div className="sm:bg-wave bg-no-repeat bg-bottom">
@@ -143,7 +143,7 @@ class ResetPassword extends Component {
                     </button>
                   )}
                   {!this.state.isSame && (
-                    <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue cursor-not-allowed">
+                    <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-[#9EDBBC] text-primary-blue cursor-not-allowed" disabled>
                       Reset Password
                     </button>
                   )}

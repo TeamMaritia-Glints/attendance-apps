@@ -97,7 +97,7 @@ class Login extends Component {
       <>
         <Head>
           <title>Attendance App - Login</title>
-          <meta name="keywords" content="login" />
+          <meta name="Login" content="login" />
         </Head>
 
         <div className="sm:bg-wave bg-no-repeat bg-bottom">

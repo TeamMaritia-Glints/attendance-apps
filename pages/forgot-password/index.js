@@ -67,7 +67,7 @@ class ForgotPassword extends Component {
       .catch((err) => {
         swal({
           text: err.message,
-          icon: "warning",
+          icon: "error",
         });
       });
   };
@@ -77,7 +77,7 @@ class ForgotPassword extends Component {
       <>
         <Head>
           <title>Attendance App - Forgot Password</title>
-          <meta name="keywords" content="forgot-password" />
+          <meta name="Forgot Password" content="forgot-password" />
         </Head>
 
         <div className="sm:bg-wave bg-no-repeat bg-bottom">

@@ -13,8 +13,8 @@ class Office extends Component {
       authToken: Cookies.get("token")
         ? Cookies.get("token")
         : Cookies.get("refreshToken")
-        ? Cookies.get("refreshToken")
-        : undefined,
+          ? Cookies.get("refreshToken")
+          : undefined,
     };
   }
 

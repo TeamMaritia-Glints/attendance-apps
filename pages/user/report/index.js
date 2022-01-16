@@ -16,6 +16,7 @@ class Report extends Component {
         : Cookies.get("refreshToken")
         ? Cookies.get("refreshToken")
         : undefined,
+      dateNow: new Date().toISOString().slice(0, 7),
     };
     this.logOut = this.logOut.bind(this);
   }
@@ -41,8 +42,14 @@ class Report extends Component {
       Router.push("/login");
     }
 
+    const date = this.state.dateNow.replaceAll("-", " ");
+    const dateArray = date.split(" ");
+
+    const month = dateArray[1];
+    const year = dateArray[0];
+
     const res = await fetch(
-      "http://localhost:3307/attendance/user-attendance-report?year=2021&month=10",
+      `http://localhost:3307/attendance/user-attendance-report?year=${year}&month=${month}`,
       {
         method: "GET",
         headers: {

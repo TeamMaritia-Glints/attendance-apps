@@ -100,7 +100,7 @@ class Register extends Component {
       <>
         <Head>
           <title>Attendance App - Register</title>
-          <meta name="keywords" content="register" />
+          <meta name="Register" content="register" />
         </Head>
 
         <div className="sm:bg-wave bg-no-repeat bg-bottom">
@@ -122,7 +122,7 @@ class Register extends Component {
                       className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
                       type="text"
                       placeholder="First Name"
-                      pattern="^[A-Za-z]+$"
+                      pattern="^[^0-9]*"
                       required
                       value={this.state.firstName}
                       onChange={(event) =>
@@ -133,7 +133,7 @@ class Register extends Component {
                       className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
                       type="text"
                       placeholder="Last Name"
-                      pattern="^[A-Za-z]+$"
+                      pattern="[^0-9]*"
                       value={this.state.lastName}
                       onChange={(event) => this.handleChange(event, "lastName")}
                     />
@@ -179,7 +179,7 @@ class Register extends Component {
                     </button>
                   )}
                   {!this.state.isSame && (
-                    <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-primary-green text-primary-blue cursor-not-allowed">
+                    <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-[#9EDBBC] text-primary-blue cursor-not-allowed" disabled>
                       Sign Up
                     </button>
                   )}
