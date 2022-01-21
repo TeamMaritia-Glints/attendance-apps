@@ -194,7 +194,7 @@ class Report extends Component {
                 </thead>
                 <tbody>
                   {reportData &&
-                    reportData.map((absence, index) => (
+                    reportData.reverse().map((absence, index) => (
                       <tr key={index}>
                         <th className="font-normal text-xs md:text-lg px-3 md:px-6 py-2">
                           {" "}

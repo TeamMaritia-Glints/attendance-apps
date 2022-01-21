@@ -64,6 +64,7 @@ class Absence extends Component {
   }
 
   search() {
+    console.log('Just for testing')
     const date = this.state.dateSearch.replaceAll("-", " ");
     const dateArray = date.split(" ");
 
@@ -90,7 +91,6 @@ class Absence extends Component {
 
   render() {
     const { absenceData } = this.state;
-
     return (
       <>
         <Layout>
