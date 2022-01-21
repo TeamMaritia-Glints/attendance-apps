@@ -56,29 +56,23 @@ class EditUser extends Component {
     const url = typeof window !== "undefined" && window.location.href;
     const urlId = url.substr(url.lastIndexOf("/") + 1);
 
-    const resUser = await fetch(
-      `https://attendance-employee.herokuapp.com/user/${urlId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.state.authToken,
-        },
-      }
-    );
+    const resUser = await fetch(`http://localhost:3307/user/${urlId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: this.state.authToken,
+      },
+    });
     const dataUser = await resUser.json();
 
     // Get User's Office
-    const resOffice = await fetch(
-      "https://attendance-employee.herokuapp.com/office?status=1",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.state.authToken,
-        },
-      }
-    );
+    const resOffice = await fetch("http://localhost:3307/office?status=1", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: this.state.authToken,
+      },
+    });
     const dataOffice = await resOffice.json();
 
     const name = dataUser.data.name.split(" ");
@@ -109,7 +103,7 @@ class EditUser extends Component {
       status: true,
     };
 
-    fetch(`https://attendance-employee.herokuapp.com/user/${this.state.id}`, {
+    fetch(`http://localhost:3307/user/${this.state.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

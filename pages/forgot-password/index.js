@@ -42,7 +42,7 @@ class ForgotPassword extends Component {
       email: this.state.email,
     };
 
-    fetch("https://attendance-employee.herokuapp.com/auth/forgotpw", {
+    fetch("http://localhost:3307/auth/forgotpw", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(forgotData),

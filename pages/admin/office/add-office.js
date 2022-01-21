@@ -55,7 +55,7 @@ class AddOffice extends Component {
       longitude: this.state.longitude,
     };
 
-    fetch("https://attendance-employee.herokuapp.com/office", {
+    fetch("http://localhost:3307/office", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -121,8 +121,11 @@ class AddOffice extends Component {
               <div className="mb-[15px]">
                 <input
                   className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                  type="text"
+                  type="number"
                   placeholder="Latitude"
+                  min="-90"
+                  max="90"
+                  step="any"
                   required
                   value={this.state.latitude}
                   onChange={(event) => this.handleChange(event, "latitude")}
@@ -131,8 +134,11 @@ class AddOffice extends Component {
               <div className="mb-[15px]">
                 <input
                   className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                  type="text"
+                  type="number"
                   placeholder="Longitude"
+                  min="-180"
+                  max="180"
+                  step="any"
                   required
                   value={this.state.longitude}
                   onChange={(event) => this.handleChange(event, "longitude")}

@@ -42,7 +42,7 @@ class Report extends Component {
     }
 
     const res = await fetch(
-      "https://attendance-employee.herokuapp.com/attendance/user-attendance-report?year=2021&month=10",
+      "http://localhost:3307/attendance/user-attendance-report?year=2021&month=10",
       {
         method: "GET",
         headers: {
@@ -58,7 +58,7 @@ class Report extends Component {
   logOut(e) {
     e.preventDefault();
 
-    fetch("https://attendance-employee.herokuapp.com/auth/logout", {
+    fetch("http://localhost:3307/auth/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

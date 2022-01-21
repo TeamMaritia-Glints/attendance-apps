@@ -32,16 +32,13 @@ class Worker extends Component {
       }
     }
 
-    const res = await fetch(
-      "https://attendance-employee.herokuapp.com/user?status=1&active=1",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.state.authToken,
-        },
-      }
-    );
+    const res = await fetch("http://localhost:3307/user?status=1&active=1", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: this.state.authToken,
+      },
+    });
     const data = await res.json();
     this.setState({ userData: data.data });
   }
@@ -62,7 +59,7 @@ class Worker extends Component {
         swal("Worker data has been deleted!", {
           icon: "success",
         });
-        fetch(`https://attendance-employee.herokuapp.com/user/${id}`, {
+        fetch(`http://localhost:3307/user/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
