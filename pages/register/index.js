@@ -122,7 +122,7 @@ class Register extends Component {
                       className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
                       type="text"
                       placeholder="First Name"
-                      pattern="^[^0-9]*"
+                      pattern="[^0-9]*"
                       required
                       value={this.state.firstName}
                       onChange={(event) =>
@@ -179,7 +179,10 @@ class Register extends Component {
                     </button>
                   )}
                   {!this.state.isSame && (
-                    <button className="w-full h-[40px] mt-2 rounded-md shadow-md bg-[#9EDBBC] text-primary-blue cursor-not-allowed" disabled>
+                    <button
+                      className="w-full h-[40px] mt-2 rounded-md shadow-md bg-[#9EDBBC] text-primary-blue cursor-not-allowed"
+                      disabled
+                    >
                       Sign Up
                     </button>
                   )}
