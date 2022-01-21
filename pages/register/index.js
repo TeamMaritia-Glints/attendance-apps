@@ -56,7 +56,7 @@ class Register extends Component {
       status: false,
     };
 
-    fetch("https://attendance-employee.herokuapp.com/auth/register", {
+    fetch("http://localhost:3307/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(signUpData),
@@ -122,7 +122,7 @@ class Register extends Component {
                       className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
                       type="text"
                       placeholder="First Name"
-                      pattern="^[A-Za-z]+$"
+                      pattern="[^0-9]*"
                       required
                       value={this.state.firstName}
                       onChange={(event) =>
@@ -133,7 +133,7 @@ class Register extends Component {
                       className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
                       type="text"
                       placeholder="Last Name"
-                      pattern="^[A-Za-z]+$"
+                      pattern="[^0-9]*"
                       value={this.state.lastName}
                       onChange={(event) => this.handleChange(event, "lastName")}
                     />

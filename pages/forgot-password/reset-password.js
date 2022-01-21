@@ -51,14 +51,11 @@ class ResetPassword extends Component {
       confirmpassword: this.state.confirmPassword,
     };
 
-    fetch(
-      `https://attendance-employee.herokuapp.com/auth/passwordreset?token=${token}&id=${id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(resetData),
-      }
-    )
+    fetch(`http://localhost:3307/auth/passwordreset?token=${token}&id=${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(resetData),
+    })
       .then((res) => {
         return res.json();
       })

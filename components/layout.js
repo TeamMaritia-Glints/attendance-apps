@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
   const logout = (e) => {
     e.preventDefault();
 
-    fetch("https://attendance-employee.herokuapp.com/auth/logout", {
+    fetch("http://localhost:3307/auth/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -44,7 +44,7 @@ class Login extends Component {
       password: this.state.password,
     };
 
-    fetch("https://attendance-employee.herokuapp.com/auth/login", {
+    fetch("http://localhost:3307/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(signInData),

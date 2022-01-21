@@ -52,7 +52,7 @@ class Admin extends Component {
     const year = dateArray[0];
 
     fetch(
-      `https://attendance-employee.herokuapp.com/attendance/user-attendances?year=${year}&month=${month}&day=${day}`,
+      `http://localhost:3307/attendance/user-attendances?year=${year}&month=${month}&day=${day}`,
       {
         method: "GET",
         headers: {
@@ -95,17 +95,14 @@ class Admin extends Component {
         swal(textSuccess, {
           icon: "success",
         });
-        fetch(
-          `https://attendance-employee.herokuapp.com/attendance/update-attendance-status`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: this.state.authToken,
-            },
-            body: JSON.stringify(data),
-          }
-        ).then(() => {
+        fetch(`http://localhost:3307/attendance/update-attendance-status`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: this.state.authToken,
+          },
+          body: JSON.stringify(data),
+        }).then(() => {
           this.componentDidMount();
         });
       } else {
@@ -123,7 +120,7 @@ class Admin extends Component {
     const year = dateArray[0];
 
     fetch(
-      `https://attendance-employee.herokuapp.com/attendance/user-attendances?year=${year}&month=${month}&day=${day}`,
+      `http://localhost:3307/attendance/user-attendances?year=${year}&month=${month}&day=${day}`,
       {
         method: "GET",
         headers: {

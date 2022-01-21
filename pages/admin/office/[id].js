@@ -48,16 +48,13 @@ class OfficeEdit extends Component {
     const url = typeof window !== "undefined" && window.location.href;
     const urlId = url.substr(url.lastIndexOf("/") + 1);
 
-    const res = await fetch(
-      `https://attendance-employee.herokuapp.com/office/${urlId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.state.authToken,
-        },
-      }
-    );
+    const res = await fetch(`http://localhost:3307/office/${urlId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: this.state.authToken,
+      },
+    });
     const data = await res.json();
     this.setState({
       name: data.data.name,
@@ -79,7 +76,7 @@ class OfficeEdit extends Component {
       status: true,
     };
 
-    fetch(`https://attendance-employee.herokuapp.com/office/${this.state.id}`, {
+    fetch(`http://localhost:3307/office/${this.state.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -146,8 +143,11 @@ class OfficeEdit extends Component {
               <div className="mb-[15px]">
                 <input
                   className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                  type="text"
+                  type="number"
                   placeholder="Latitude"
+                  min="-90"
+                  max="90"
+                  step="any"
                   required
                   value={this.state.latitude}
                   onChange={(event) => this.handleChange(event, "latitude")}
@@ -156,8 +156,11 @@ class OfficeEdit extends Component {
               <div className="mb-[15px]">
                 <input
                   className="w-full h-[40px] pl-[15px] rounded-md bg-primary-blue text-white"
-                  type="text"
+                  type="number"
                   placeholder="Longitude"
+                  min="-180"
+                  max="180"
+                  step="any"
                   required
                   value={this.state.longitude}
                   onChange={(event) => this.handleChange(event, "longitude")}
